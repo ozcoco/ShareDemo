@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="handleClick"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+
+
+        <Button
+            android:id="@+id/btn_shareLink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{handleClick::onClick}"
+            android:text="share Link"
+            app:layout_constraintBottom_toTopOf="@id/btn_shareImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+
+        <Button
+            android:id="@+id/btn_shareImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{handleClick::onClick}"
+            android:text="share Image"
+            app:layout_constraintBottom_toTopOf="@id/btn_shareVideo"
+            app:layout_constraintTop_toBottomOf="@id/btn_shareLink" />
+
+
+        <Button
+            android:id="@+id/btn_shareVideo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{handleClick::onClick}"
+            android:text="share Video"
+            app:layout_constraintBottom_toTopOf="@id/btn_shareMedia"
+            app:layout_constraintTop_toBottomOf="@id/btn_shareImage" />
+
+
+        <Button
+            android:id="@+id/btn_shareMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{handleClick::onClick}"
+            android:text="share Media"
+            app:layout_constraintBottom_toTopOf="@id/btn_ui"
+            app:layout_constraintTop_toBottomOf="@id/btn_shareVideo" />
+
+        <Button
+            android:id="@+id/btn_ui"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{handleClick::onClick}"
+            android:text="share UI"
+            app:layout_constraintBottom_toTopOf="@id/btn_sys"
+            app:layout_constraintTop_toBottomOf="@id/btn_shareMedia" />
+
+        <Button
+            android:id="@+id/btn_sys"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{handleClick::onClick}"
+            android:text="System"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_ui" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

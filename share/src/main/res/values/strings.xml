@@ -1,0 +1,6 @@
+<resources>
+    <string name="action_cancel">Cancel</string>
+
+    <!-- facebook -->
+    <string name="facebook_app_id">711368076040966</string>
+</resources>

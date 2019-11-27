@@ -1,0 +1,29 @@
+<resources>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 无标题 -->
+        <item name="windowNoTitle">true</item>
+        <item name="background">@android:color/transparent</item>
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 遮罩层 -->
+        <!--        <item name="android:backgroundDimAmount">0.5</item>-->
+        <item name="android:backgroundDimAmount">0.3</item>
+    </style>
+
+    <!-- dialog的动画 -->
+    <style name="main_menu_animStyle">
+        <!--windowEnterAnimation 进入的动画-->
+        <item name="android:windowEnterAnimation">@anim/dialog_share_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_share_out_anim</item>
+    </style>
+
+</resources>
