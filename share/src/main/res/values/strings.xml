@@ -1,6 +1,12 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="action_cancel">Cancel</string>
 
     <!-- facebook -->
     <string name="facebook_app_id">711368076040966</string>
+
+
+    <!--Twitter-->
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" tools:ignore="ExtraTranslation">jFRczHoA7jym7X9DYOG6IMQab</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" tools:ignore="ExtraTranslation">X3hYoUjklg5c3QpLi6MPx487nmGSGjlMm77kTAWMeRJPt9Xmlu</string>
+
 </resources>

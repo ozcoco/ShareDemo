@@ -29,6 +29,17 @@
                 <!--//fb后的数字替换成自己的facebook_app_id-->
             </intent-filter>
         </activity>
+
+
+        <provider
+            android:name=".share.provider.GenericFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

@@ -1,17 +1,26 @@
 package com.xdynamics.share;
 
 import android.content.Intent;
+import android.content.PeriodicSync;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-
+import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.PermissionUtils;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.xdynamics.share.databinding.ActivityMainBinding;
 
 import org.oz.utils.Ts;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,6 +38,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBinding.setHandleClick(this);
 
         setContentView(mBinding.getRoot());
+
+        requestPermission();
+    }
+
+
+    private void requestPermission() {
+
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
+            @Override
+            public void onGranted() {
+
+            }
+
+            @Override
+            public void onDenied() {
+
+            }
+        }).request();
+
     }
 
 
@@ -37,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
 
         shareCallback.onActivityResult(requestCode, resultCode, data);
+
+        twitterLoginButton.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -56,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.equals(mBinding.btnShareMedia)) {
 
             shareMedia();
+        } else if (v.equals(mBinding.btnShareTweet)) {
+
+            shareToTwitter();
         } else if (v.equals(mBinding.btnUi)) {
 
             share2();
@@ -64,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    /**********************************  facebook  *************************************/
 
     private void shareLink() {
 
@@ -169,4 +204,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     };
+
+
+    /**********************************  分享到twitter  *************************************/
+
+
+    /**
+     * 分享到twitter
+     * 若未安装twitter客户端，则会跳转到浏览器
+     */
+
+    TwitterLoginButton twitterLoginButton;
+
+    public void shareToTwitter() {
+
+    /*    twitterLoginButton = new TwitterLoginButton(this);
+
+        twitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+
+//                final TwitterSession session = TwitterCore.getInstance().getSessionManager()
+//                        .getActiveSession();
+
+                final Intent intent = new ComposerActivity.Builder(MainActivity.this)
+                        .session(result.data)
+                        .image(Uri.fromFile(new File("/storage/sdcard0/DCIM/Camera/IMG_20181124_190200.jpg")))
+                        .text("Tweet from TwitterKit!")
+                        .hashtags("#twitter")
+                        .createIntent();
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+
+            }
+        });
+
+        twitterLoginButton.performClick();*/
+
+        TweetComposer.Builder builder = null;
+
+ /*       Uri uri = FileProvider.getUriForFile(getApplicationContext(),
+                getApplicationContext().getPackageName() + ".provider",
+                new File("/storage/sdcard0/DCIM/Camera/IMG_20181124_190200.jpg"));*/
+
+        try {
+            builder = new TweetComposer.Builder(this)
+                    .text("just setting up my Twitter Kit.")
+                    .url(new URL("http://www.twitter.com"))
+                    .image(Uri.fromFile(new File("/storage/sdcard0/DCIM/Camera/IMG_20181124_190200.jpg")));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        builder.show();
+
+    }
+
 }
+
+
+
