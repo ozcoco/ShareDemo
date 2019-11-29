@@ -15,6 +15,15 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+        <Button
+            android:id="@+id/btn_shareInstagram"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{handleClick::onClick}"
+            android:text="share Instagram"
+            app:layout_constraintBottom_toTopOf="@id/btn_shareTweet"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <Button
             android:id="@+id/btn_shareTweet"
@@ -23,7 +32,7 @@
             android:onClick="@{handleClick::onClick}"
             android:text="share Twitter"
             app:layout_constraintBottom_toTopOf="@id/btn_shareLink"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_shareInstagram"
             app:layout_constraintVertical_chainStyle="packed" />
 
         <Button

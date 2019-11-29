@@ -31,28 +31,28 @@ public class FacebookShare {
 
     private WeakReference<Fragment> fragment;
 
-    public FacebookShare(AppCompatActivity activity, ShareContent content, ShareCallback callback) throws NullPointerException {
+    public FacebookShare(AppCompatActivity activity, ShareContent content, ShareCallback callback) throws IllegalArgumentException {
 
         if (activity == null)
-            throw new NullPointerException("activity != null ");
+            throw new IllegalArgumentException("activity != null ");
         if (content == null)
-            throw new NullPointerException("content != null ");
+            throw new IllegalArgumentException("content != null ");
         if (callback == null)
-            throw new NullPointerException("callback != null ");
+            throw new IllegalArgumentException("callback != null ");
 
         this.activity = new WeakReference<>(activity);
         this.content = content;
         init(callback);
     }
 
-    public FacebookShare(Fragment fragment, ShareContent content, ShareCallback callback) throws NullPointerException {
+    public FacebookShare(Fragment fragment, ShareContent content, ShareCallback callback) throws IllegalArgumentException {
 
         if (fragment == null)
-            throw new NullPointerException("fragment != null ");
+            throw new IllegalArgumentException("fragment != null ");
         if (content == null)
-            throw new NullPointerException("content != null ");
+            throw new IllegalArgumentException("content != null ");
         if (callback == null)
-            throw new NullPointerException("callback != null ");
+            throw new IllegalArgumentException("callback != null ");
 
         this.fragment = new WeakReference<>(fragment);
         this.content = content;

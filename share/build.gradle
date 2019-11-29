@@ -27,9 +27,18 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
 
     //twitter
-    api 'com.twitter.sdk.android:twitter-core:3.1.1'
-    api 'com.twitter.sdk.android:tweet-ui:3.1.1'
-    api 'com.twitter.sdk.android:tweet-composer:3.1.1'
-    api 'com.twitter.sdk.android:twitter-mopub:3.1.1'
+    api 'com.twitter.sdk.android:twitter-core:3.3.0'
+//    api 'com.twitter.sdk.android:tweet-ui:3.1.1'
+    api 'com.twitter.sdk.android:tweet-composer:3.3.0'
+//    api 'com.twitter.sdk.android:twitter-mopub:3.1.1'
+
+    // Include all the Twitter APIs
+//    api 'com.twitter.sdk.android:twitter:3.3.0'
+    // (Optional) Monetize using mopub
+//    api 'com.twitter.sdk.android:twitter-mopub:3.1.1'
+
+//    api('com.twitter.sdk.android:twitter:3.3.0@aar') {
+//        transitive = true
+//    }
 
 }

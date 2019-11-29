@@ -1,18 +1,27 @@
 package com.xdynamics.share;
 
 import android.content.Intent;
-import android.content.PeriodicSync;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.xdynamics.share.databinding.ActivityMainBinding;
 
@@ -21,6 +30,7 @@ import org.oz.utils.Ts;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -66,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         shareCallback.onActivityResult(requestCode, resultCode, data);
 
-        twitterLoginButton.onActivityResult(requestCode, resultCode, data);
+//        twitterLoginButton.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -89,6 +99,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.equals(mBinding.btnShareTweet)) {
 
             shareToTwitter();
+        } else if (v.equals(mBinding.btnShareInstagram)) {
+
+            shareImageToInstagram();
+
+//            shareVideoToInstagram();
+
         } else if (v.equals(mBinding.btnUi)) {
 
             share2();
@@ -229,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 final Intent intent = new ComposerActivity.Builder(MainActivity.this)
                         .session(result.data)
-                        .image(Uri.fromFile(new File("/storage/sdcard0/DCIM/Camera/IMG_20181124_190200.jpg")))
+                        .image(Uri.fromFile(new File("/storage/sdcard0/DCIM/Camera/test2.jpg")))
                         .text("Tweet from TwitterKit!")
                         .hashtags("#twitter")
                         .createIntent();
@@ -245,26 +261,182 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         twitterLoginButton.performClick();*/
 
-        TweetComposer.Builder builder = null;
+        String img = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1575021002547&di=4e6f5fdcea945e08516738f44b976fea&imgtype=0&src=http%3A%2F%2Fimg1.replays.net%2Fwww.replays.net%2Fuploads%2Fbody%2Fzhuzhanyezizhuwyxw%2F1441%2F212b2c283141.jpg";
 
- /*       Uri uri = FileProvider.getUriForFile(getApplicationContext(),
-                getApplicationContext().getPackageName() + ".provider",
-                new File("/storage/sdcard0/DCIM/Camera/IMG_20181124_190200.jpg"));*/
+
+//        String filename = "/DCIM/Camera/test2.jpg";
+        String filename = "/test2.jpg";
+        String filename2 = "/DCIM/Camera/IMG_20190130_072247.jpg";
+        String filename3 = "/vtest.mp4";
+        String mediaPath = Environment.getExternalStorageDirectory() + filename;
+        String mediaPath2 = Environment.getExternalStorageDirectory() + filename2;
+        String mediaPath3 = Environment.getExternalStorageDirectory() + filename3;
+
+        Uri sharedFileUri = FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", new File(mediaPath));
+        Uri sharedFileUri2 = FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", new File(mediaPath2));
+        Uri sharedFileUri3 = FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", new File(mediaPath3));
+
+
+        Ts.i(sharedFileUri.toString());
+
+        Log.d("----->", sharedFileUri.toString());
+        Log.d("----->", sharedFileUri.getPath());
+
+        TweetComposer.Builder builder = null;
 
         try {
             builder = new TweetComposer.Builder(this)
+//                    .image(sharedFileUri3)
+//                    .image(Uri.parse(img))
+//                    .image(sharedFileUri)
+//                    .image(sharedFileUri2)
                     .text("just setting up my Twitter Kit.")
-                    .url(new URL("http://www.twitter.com"))
-                    .image(Uri.fromFile(new File("/storage/sdcard0/DCIM/Camera/IMG_20181124_190200.jpg")));
+                    .url(new URL("http://www.twitter.com"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
-        builder.show();
+//        builder.show();
+
+        Intent intent = builder.createIntent();
+
+        ArrayList<Uri> imgs = new ArrayList<>();
+
+        imgs.add(sharedFileUri);
+        imgs.add(sharedFileUri2);
+
+        intent.putExtra(Intent.EXTRA_STREAM, imgs);
+        intent.setType("image/jpeg");
+
+//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+        startActivity(intent);
+
+
+
+        /* Tween */
+
+  /*      final TwitterSession session = TwitterCore.getInstance().getSessionManager()
+                .getActiveSession();
+
+        final Intent intent = new ComposerActivity.Builder(MainActivity.this)
+                .session(session)
+                .image(sharedFileUri)
+//                .image(sharedFileUri2)
+                .text("Tweet from TwitterKit!")
+                .hashtags("#twitter")
+                .createIntent();
+
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+        startActivity(intent);*/
+
+    }
+
+
+    public void shareImageToInstagram() {
+
+        String type = "image/*";
+        String filename = "DCIM/Camera/IMG_20181124_190200.jpg";
+        String mediaPath = Environment.getExternalStorageDirectory() + filename;
+        createInstagramIntent(type, mediaPath);
+    }
+
+
+    public void shareVideoToInstagram() {
+
+        String type = "video/*";
+        String filename = "DCIM/Camera/VID_20190227_073228.mp4";
+        String mediaPath = Environment.getExternalStorageDirectory() + filename;
+        createInstagramIntent(type, mediaPath);
+
+    }
+
+    private void createInstagramIntent(String type, String mediaPath) {
+
+        // Create the URI from the media
+        Uri sharedFileUri = FileProvider.getUriForFile(this, getPackageName() + ".fileProvider", new File(mediaPath));
+
+        Ts.i(sharedFileUri.toString());
+
+      /*  // Create the new Intent using the 'Send' action.
+        Intent share = new Intent(Intent.ACTION_SEND);
+        // Set the MIME type
+        share.setType(type);
+        // Add the URI to the Intent.
+        share.putExtra(Intent.EXTRA_STREAM, sharedFileUri);
+        // Broadcast the Intent.
+        startActivity(Intent.createChooser(share, "Share to"));*/
+
+        ShareCompat.IntentBuilder intentBuilder = ShareCompat.IntentBuilder.from(this);
+
+//        intentBuilder.addStream(sharedFileUri);
+
+        intentBuilder.setType(type);
+
+        intentBuilder.setText("12324153546765");
+
+        intentBuilder.setStream(sharedFileUri);
+
+        Intent intent = intentBuilder.createChooserIntent();
+
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+//        intentBuilder.startChooser();
+
+        startActivity(intent);
 
     }
 
 }
 
+
+
+
+
+class de{
+/*
+
+    private void startYouTubeShare() {
+
+        String mediaPath = gallery.getLocalPath();
+        String videoName = editText.getText().toString();
+        if (!TextUtils.isEmpty(mChosenAccountName) && !TextUtils.isEmpty(mediaPath)) {
+            if (mediaPath != null) {
+                Intent uploadIntent = new Intent(getContext(), UploadService.class);
+                uploadIntent.setData(Uri.fromFile(new File(mediaPath)));
+                uploadIntent.putExtra("gAcName", mChosenAccountName);
+                uploadIntent.putExtra("videoname", videoName);
+                getActivity().startService(uploadIntent);
+                setBottomOn();
+                // getActivity().finish();
+            }
+
+        }
+    }
+
+
+    private void createInstagramIntent() {
+        String type;
+        String mediaPath = gallery.getLocalPath();
+
+        if (VideoUtil.isVideo(mediaPath)) {
+            type = "video/*";
+        } else {
+            type = "image/*";
+        }
+        Intent share = new Intent();
+        share.setType(type);
+        File media = new File(mediaPath);
+        Uri uri = Uri.fromFile(media);
+        share.setComponent(new ComponentName("com.instagram.android", "com.instagram.share.handleractivity.ShareHandlerActivity"));
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(share);
+
+    }
+*/
+
+
+}
 
 

@@ -33,7 +33,7 @@
 
         <provider
             android:name=".share.provider.GenericFileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="${applicationId}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

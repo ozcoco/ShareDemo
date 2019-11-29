@@ -7,6 +7,12 @@ import com.blankj.utilcode.util.ToastUtils;
 public class Ts {
 
 
+    public static void lI(String msg) {
+
+        ToastUtils.showLong(msg);
+    }
+
+
     public static void i(String msg) {
 
         ToastUtils.showShort(msg);
