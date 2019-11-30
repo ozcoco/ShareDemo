@@ -61,6 +61,11 @@ public class ShareUtils {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+
+                TwitterShare share = new TwitterShare(activity, content, callback);
+
+                share.show();
+
             }
         });
 
@@ -123,6 +128,10 @@ public class ShareUtils {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+
+                TwitterShare share = new TwitterShare(fragment, content, callback);
+
+                share.show();
             }
         });
 

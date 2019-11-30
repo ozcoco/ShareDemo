@@ -26,6 +26,8 @@ public class ShareContent {
 
     private List<String> videoPathList;
 
+    private List<String> imagePathList;
+
     private ShareContent() {
     }
 
@@ -53,6 +55,10 @@ public class ShareContent {
         return videoPathList;
     }
 
+    public List<String> getImagePathList() {
+        return imagePathList;
+    }
+
     public static class Builder {
 
         private String postId;
@@ -66,6 +72,8 @@ public class ShareContent {
         private List<Bitmap> imageBitmapList = new ArrayList<>();
 
         private List<String> videoPathList = new ArrayList<>();
+
+        private List<String> imagePathList = new ArrayList<>();
 
 
         public ShareContent.Builder setPostId(String postId) {
@@ -113,9 +121,23 @@ public class ShareContent {
             return this;
         }
 
+        public ShareContent.Builder addImage(String filename) {
+
+            imagePathList.add(filename);
+
+            return this;
+        }
+
         public ShareContent.Builder addVideo(List<String> filenames) {
 
             videoPathList.addAll(filenames);
+
+            return this;
+        }
+
+        public ShareContent.Builder addImagePath(List<String> filenames) {
+
+            imagePathList.addAll(filenames);
 
             return this;
         }
@@ -141,6 +163,8 @@ public class ShareContent {
             content.imageBitmapList = imageBitmapList;
 
             content.videoPathList = videoPathList;
+
+            content.imagePathList = imagePathList;
 
             return content;
 

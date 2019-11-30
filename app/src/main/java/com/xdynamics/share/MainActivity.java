@@ -1,5 +1,6 @@
 package com.xdynamics.share;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -14,27 +15,21 @@ import android.view.View;
 
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
-import com.twitter.sdk.android.core.DefaultLogger;
-import com.twitter.sdk.android.core.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterConfig;
-import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
-import com.twitter.sdk.android.tweetcomposer.ComposerActivity;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.xdynamics.share.databinding.ActivityMainBinding;
+import com.xdynamics.share.services.NotificationCollectorService;
 
 import org.oz.utils.Ts;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final short TWEET_COMPOSER_REQUEST_CODE = 0x123;
     ActivityMainBinding mBinding;
 
     @Override
@@ -54,6 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void requestPermission() {
+
+        if (!NotificationCollectorService.Permission.notificationListenerEnable(getApplicationContext())) {
+
+            NotificationCollectorService.Permission.gotoNotificationAccessSetting(getApplicationContext());
+        }
 
         PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
             @Override
@@ -78,6 +78,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        twitterLoginButton.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == TWEET_COMPOSER_REQUEST_CODE) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                Ts.i("分享成功");
+
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+
+                Ts.w("取消分享");
+            }
+        }
+
     }
 
     @Override
@@ -98,7 +110,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             shareMedia();
         } else if (v.equals(mBinding.btnShareTweet)) {
 
-            shareToTwitter();
+            shareToTwitter2();
+
+//            shareToTwitter();
         } else if (v.equals(mBinding.btnShareInstagram)) {
 
             shareImageToInstagram();
@@ -218,6 +232,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Ts.e("分享发生错误");
 
+
+            error.printStackTrace();
+
         }
     };
 
@@ -298,19 +315,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        builder.show();
 
+        assert builder != null;
         Intent intent = builder.createIntent();
 
-        ArrayList<Uri> imgs = new ArrayList<>();
-
-        imgs.add(sharedFileUri);
-        imgs.add(sharedFileUri2);
-
-        intent.putExtra(Intent.EXTRA_STREAM, imgs);
-        intent.setType("image/jpeg");
+//        ArrayList<Uri> imgs = new ArrayList<>();
+//
+//        imgs.add(sharedFileUri);
+//        imgs.add(sharedFileUri2);
+//
+//        intent.putExtra(Intent.EXTRA_STREAM, imgs);
+//        intent.setType("image/jpeg");
 
 //        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
-        startActivity(intent);
+//        startActivity(intent);
+
+        startActivityForResult(intent, TWEET_COMPOSER_REQUEST_CODE);
 
 
 
@@ -330,6 +350,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
         startActivity(intent);*/
+
+    }
+
+    public void shareToTwitter2() {
+
+        String filename = "/test2.jpg";
+        String filename2 = "/DCIM/Camera/IMG_20190130_072247.jpg";
+        String filename3 = "/vtest.mp4";
+        String mediaPath = Environment.getExternalStorageDirectory() + filename;
+        String mediaPath2 = Environment.getExternalStorageDirectory() + filename2;
+        String mediaPath3 = Environment.getExternalStorageDirectory() + filename3;
+
+
+        ShareContent content = new ShareContent.Builder()
+                .setType(ShareContent.Type.IMAGE)
+                .addImage(mediaPath)
+                .addImage(mediaPath2)
+                .addVideo(mediaPath3)
+                .setPostId(UUID.randomUUID().toString())
+                .build();
+
+        ShareUtils.showShare(this, content, shareCallback);
 
     }
 
@@ -391,10 +433,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 }
 
 
-
-
-
-class de{
+class de {
 /*
 
     private void startYouTubeShare() {
