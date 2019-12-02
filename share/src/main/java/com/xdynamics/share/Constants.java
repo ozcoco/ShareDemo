@@ -16,6 +16,10 @@ public interface Constants {
 
     String ERROR_UNKNOWN = "ERROR_UNKNOWN";
 
+    String MEDIA_TYPE_IMAGE = "image/*";
+
+    String MEDIA_TYPE_VIDEO = "video/*";
+
 
     interface Twitter {
 
@@ -24,6 +28,15 @@ public interface Constants {
         short TWEET_COMPOSER_REQUEST_CODE = 0x123;
 
         String ERROR_DUPLICATE_TWEET = "ERROR_DUPLICATE_TWEET";
+    }
+
+
+    interface YouTube {
+
+        String packageName = "com.google.android.youtube";
+
+        short YOUTUBE_REQUEST_CODE = 0x124;
+
     }
 
 }

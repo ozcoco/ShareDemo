@@ -2,6 +2,8 @@ package com.xdynamics.share;
 
 import android.graphics.Bitmap;
 
+import com.xdynamics.share.bean.ContentWrapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,8 @@ public class ShareContent {
     private List<String> videoPathList;
 
     private List<String> imagePathList;
+
+    private ContentWrapper contentWrapper;
 
     private ShareContent() {
     }
@@ -59,6 +63,10 @@ public class ShareContent {
         return imagePathList;
     }
 
+    public ContentWrapper getContentWrapper() {
+        return contentWrapper;
+    }
+
     public static class Builder {
 
         private String postId;
@@ -75,73 +83,78 @@ public class ShareContent {
 
         private List<String> imagePathList = new ArrayList<>();
 
+        private ContentWrapper contentWrapper;
 
-        public ShareContent.Builder setPostId(String postId) {
+        public Builder setPostId(String postId) {
             this.postId = postId;
             return this;
         }
 
-        public ShareContent.Builder setType(ShareContent.Type type) {
+        public Builder setType(ShareContent.Type type) {
 
             this.type = type;
 
             return this;
         }
 
-        public ShareContent.Builder setLink(String link) {
+        public Builder setLink(String link) {
 
             this.link = link;
 
             return this;
         }
 
-        public ShareContent.Builder setQuote(String quote) {
+        public Builder setQuote(String quote) {
             this.quote = quote;
             return this;
         }
 
-        public ShareContent.Builder addImage(Bitmap bmp) {
+        public Builder addImage(Bitmap bmp) {
 
             imageBitmapList.add(bmp);
 
             return this;
         }
 
-        public ShareContent.Builder addImage(List<Bitmap> bmps) {
+        public Builder addImage(List<Bitmap> bmps) {
 
             imageBitmapList.addAll(bmps);
 
             return this;
         }
 
-        public ShareContent.Builder addVideo(String filename) {
+        public Builder addVideo(String filename) {
 
             videoPathList.add(filename);
 
             return this;
         }
 
-        public ShareContent.Builder addImage(String filename) {
+        public Builder addImage(String filename) {
 
             imagePathList.add(filename);
 
             return this;
         }
 
-        public ShareContent.Builder addVideo(List<String> filenames) {
+        public Builder addVideo(List<String> filenames) {
 
             videoPathList.addAll(filenames);
 
             return this;
         }
 
-        public ShareContent.Builder addImagePath(List<String> filenames) {
+        public Builder addImagePath(List<String> filenames) {
 
             imagePathList.addAll(filenames);
 
             return this;
         }
 
+        public Builder setContentWrapper(ContentWrapper contentWrapper) {
+            this.contentWrapper = contentWrapper;
+            return this;
+        }
 
         public ShareContent build() {
 
@@ -165,6 +178,8 @@ public class ShareContent {
             content.videoPathList = videoPathList;
 
             content.imagePathList = imagePathList;
+
+            content.contentWrapper = contentWrapper;
 
             return content;
 

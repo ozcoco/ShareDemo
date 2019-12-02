@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.xdynamics.share.services.ShareNotificationHandle;
@@ -73,7 +72,6 @@ public class TwitterShare implements Destroyable {
                 }
 
             }
-
 
         }
     };
@@ -356,7 +354,7 @@ public class TwitterShare implements Destroyable {
 
             List<Uri> uris = new ArrayList<>();
 
-            for (String path : content.getImagePathList()) {
+            for (String path : content.getVideoPathList()) {
 
                 uris.add(FileProvider.getUriForFile(activity.get(), activity.get().getPackageName() + ".fileProvider", new File(path)));
             }

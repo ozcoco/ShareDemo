@@ -1,199 +1,169 @@
 package com.xdynamics.share;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.ShareMediaContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.ShareVideo;
-import com.facebook.share.widget.ShareDialog;
+import com.xdynamics.share.bean.YouTubeContentWrapper;
+import com.xdynamics.share.services.ShareNotificationHandle;
+import com.xdynamics.share.utils.MediaStoreUtils;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.List;
+import java.util.Objects;
 
-public class YouToShare {
-
-    private CallbackManager callbackManager;
-
-    private ShareDialog shareDialog;
+public class YouToShare implements Destroyable {
 
     private final ShareContent content;
 
-    private WeakReference<AppCompatActivity> activity;
+    private WeakReference<Activity> activity;
 
     private WeakReference<Fragment> fragment;
 
-    public YouToShare(AppCompatActivity activity, ShareContent content, ShareCallback callback) throws NullPointerException {
+    private ShareCallback callback;
+
+    private BroadcastReceiver callbackReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (callback == null) return;
+
+            if (Constants.Twitter.CALLBACK_RECEIVER_ACTION.equals(intent.getAction())) {
+
+                final ShareNotificationHandle handle = (ShareNotificationHandle) intent.getSerializableExtra(Constants.INTENT_EXTRA_DATA);
+
+                final int state = intent.getIntExtra(Constants.INTENT_STATE, -1);
+
+                switch (state) {
+
+                    case Constants.STATE_CANCEL:
+
+                        if (callback != null)
+                            callback.onCancel();
+
+                        break;
+
+                    case Constants.STATE_ERROR:
+
+                        final String error = intent.getStringExtra(Constants.INTENT_ERROR);
+
+                        if (callback != null)
+                            callback.onError(new ShareException(error));
+
+                        break;
+
+                    case Constants.STATE_SUCCESS:
+
+                        if (callback != null)
+                            callback.onSuccess(content.getPostId());
+
+                        break;
+
+                }
+
+            }
+
+        }
+    };
+
+
+    private void register() {
+
+        IntentFilter filter = new IntentFilter();
+
+        filter.addAction(Constants.Twitter.CALLBACK_RECEIVER_ACTION);
+
+        if (activity != null && activity.get() != null) {
+
+            LocalBroadcastManager.getInstance(activity.get()).registerReceiver(callbackReceiver, filter);
+
+        } else {
+            LocalBroadcastManager.getInstance(Objects.requireNonNull(fragment.get().getContext())).registerReceiver(callbackReceiver, filter);
+        }
+
+
+    }
+
+    private void unregister() {
+
+        if (activity != null && activity.get() != null) {
+
+            IntentFilter filter = new IntentFilter();
+
+            LocalBroadcastManager.getInstance(activity.get()).registerReceiver(callbackReceiver, filter);
+
+        } else {
+            LocalBroadcastManager.getInstance(Objects.requireNonNull(fragment.get().getContext())).unregisterReceiver(callbackReceiver);
+        }
+    }
+
+
+    public YouToShare(Activity activity, ShareContent content, ShareCallback callback) throws NullPointerException {
 
         if (activity == null)
-            throw new NullPointerException("activity != null ");
+            throw new IllegalArgumentException("activity != null ");
         if (content == null)
-            throw new NullPointerException("content != null ");
+            throw new IllegalArgumentException("content != null ");
         if (callback == null)
-            throw new NullPointerException("callback != null ");
+            throw new IllegalArgumentException("callback != null ");
 
         this.activity = new WeakReference<>(activity);
         this.content = content;
+        this.callback = callback;
         init(callback);
     }
 
     public YouToShare(Fragment fragment, ShareContent content, ShareCallback callback) throws NullPointerException {
 
         if (fragment == null)
-            throw new NullPointerException("fragment != null ");
+            throw new IllegalArgumentException("fragment != null ");
         if (content == null)
-            throw new NullPointerException("content != null ");
+            throw new IllegalArgumentException("content != null ");
         if (callback == null)
-            throw new NullPointerException("callback != null ");
+            throw new IllegalArgumentException("callback != null ");
 
         this.fragment = new WeakReference<>(fragment);
         this.content = content;
+        this.callback = callback;
         init(callback);
     }
 
-    private void init(final ShareCallback callback) {
 
-        callbackManager = CallbackManager.Factory.create();
+    private void init(final ShareCallback callback) {
 
         if (callback != null)
             callback.setOnActivityResult(new ShareCallback.OnActivityResultCallback() {
                 @Override
                 public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-                    return callbackManager.onActivityResult(requestCode, resultCode, data);
+
+                    if (requestCode == Constants.YouTube.YOUTUBE_REQUEST_CODE) {
+
+                        if (resultCode == Activity.RESULT_CANCELED) {
+                            callback.onCancel();
+                        }
+                    }
+
+                    return false;
                 }
             });
 
-        if (activity != null && activity.get() != null)
-            shareDialog = new ShareDialog(activity.get());
-        else
-            shareDialog = new ShareDialog(fragment.get());
-
-        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-            @Override
-            public void onSuccess(Sharer.Result result) {
-
-
-                if (callback != null)
-                    callback.onSuccess(result.getPostId());
-
-            }
-
-            @Override
-            public void onCancel() {
-
-                if (callback != null)
-                    callback.onCancel();
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-                if (callback != null)
-                    callback.onError(new ShareException(error));
-
-                error.printStackTrace();
-            }
-        });
+        register();
 
     }
 
 
     public void show() {
 
-        switch (content.getType()) {
-
-            case LINK:
-                shareLink();
-                break;
-            case IMAGE:
-                shareImage();
-                break;
-            case VIDEO:
-                shareVideo();
-                break;
-            case MEDIA:
-                shareMedia();
-                break;
-        }
-
-    }
-
-
-    private void shareLink() {
-
-        if (ShareDialog.canShow(ShareLinkContent.class)) {
-
-            ShareLinkContent content = new ShareLinkContent.Builder()
-                    .setContentUrl(Uri.parse(this.content.getLink()))
-                    .setQuote(this.content.getQuote())
-                    .setPageId(this.content.getPostId())
-                    .build();
-
-            shareDialog.show(content);
-        }
-        
-    }
-
-    private void shareImage() {
-
-        if (ShareDialog.canShow(ShareMediaContent.class)) {
-
-            ShareMediaContent.Builder builder = new ShareMediaContent.Builder();
-
-            for (Bitmap bmp : this.content.getImageBitmapList()) {
-
-                SharePhoto photo = new SharePhoto.Builder()
-                        .setBitmap(bmp)
-                        .build();
-
-                builder.addMedium(photo);
-
-            }
-
-            builder.setPageId(this.content.getPostId());
-
-            shareDialog.show(builder.build(), ShareDialog.Mode.AUTOMATIC);
-        }
-
-
-    }
-
-    private void shareMedia() {
-
-        if (ShareDialog.canShow(ShareMediaContent.class)) {
-
-            ShareMediaContent.Builder builder = new ShareMediaContent.Builder();
-
-            for (Bitmap bmp : this.content.getImageBitmapList()) {
-
-                SharePhoto photo = new SharePhoto.Builder()
-                        .setBitmap(bmp)
-                        .build();
-
-                builder.addMedium(photo);
-
-            }
-
-            for (String path : this.content.getVideoPathList()) {
-
-                ShareVideo photo = new ShareVideo.Builder()
-                        .setLocalUrl(Uri.fromFile(new File(path)))
-                        .build();
-
-                builder.addMedium(photo);
-            }
-            builder.setPageId(this.content.getPostId());
-
-            shareDialog.show(builder.build(), ShareDialog.Mode.AUTOMATIC);
+        if (content.getType() == ShareContent.Type.VIDEO) {
+            shareVideo();
         }
 
     }
@@ -201,24 +171,86 @@ public class YouToShare {
 
     private void shareVideo() {
 
-        if (ShareDialog.canShow(ShareMediaContent.class)) {
+        if (activity != null && activity.get() != null) {
 
-            ShareMediaContent.Builder builder = new ShareMediaContent.Builder();
+            Intent share = new Intent(Intent.ACTION_SEND);
 
-            for (String path : this.content.getVideoPathList()) {
+            share.setType(Constants.MEDIA_TYPE_VIDEO);
 
-                ShareVideo photo = new ShareVideo.Builder()
-                        .setLocalUrl(Uri.fromFile(new File(path)))
-                        .build();
+            PackageManager packageManager = activity.get().getPackageManager();
 
-                builder.addMedium(photo);
+            @SuppressLint("WrongConstant") List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(share, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
+
+            ResolveInfo resolveInfo = null;
+
+            for (ResolveInfo info : resolveInfos) {
+                if (Constants.YouTube.packageName.equals(info.activityInfo.packageName)) {
+                    resolveInfo = info;
+                    break;
+                }
             }
 
-            builder.setPageId(this.content.getPostId());
+            final YouTubeContentWrapper wrapper = (YouTubeContentWrapper) content.getContentWrapper();
 
-            shareDialog.show(builder.build(), ShareDialog.Mode.AUTOMATIC);
+            share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(activity.get().getApplication(), wrapper.getVideoPath()));
+
+            assert resolveInfo != null;
+            share.setClassName(Constants.YouTube.packageName, resolveInfo.activityInfo.name);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
+
+            if (!TextUtils.isEmpty(wrapper.getTitle()))
+                share.putExtra(Intent.EXTRA_TITLE, wrapper.getTitle());
+
+            if (!TextUtils.isEmpty(wrapper.getTags()))
+                share.putExtra(Intent.EXTRA_TEXT, wrapper.getTags());
+
+            if (!TextUtils.isEmpty(wrapper.getDescription()))
+                share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
+
+            activity.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.YouTube.YOUTUBE_REQUEST_CODE);
+
+        } else {
+
+            Intent share = new Intent(Intent.ACTION_SEND);
+
+            share.setType(Constants.MEDIA_TYPE_VIDEO);
+
+            PackageManager packageManager = fragment.get().getContext().getPackageManager();
+
+            @SuppressLint("WrongConstant") List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(share, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
+
+            ResolveInfo resolveInfo = null;
+
+            for (ResolveInfo info : resolveInfos) {
+                if (Constants.YouTube.packageName.equals(info.activityInfo.packageName)) {
+                    resolveInfo = info;
+                    break;
+                }
+            }
+
+            final YouTubeContentWrapper wrapper = (YouTubeContentWrapper) content.getContentWrapper();
+
+            share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(fragment.get().getContext(), wrapper.getVideoPath()));
+
+            assert resolveInfo != null;
+            share.setClassName(Constants.YouTube.packageName, resolveInfo.activityInfo.name);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
+
+            if (!TextUtils.isEmpty(wrapper.getTitle()))
+                share.putExtra(Intent.EXTRA_TITLE, wrapper.getTitle());
+
+            if (!TextUtils.isEmpty(wrapper.getTags()))
+                share.putExtra(Intent.EXTRA_TEXT, wrapper.getTags());
+
+            if (!TextUtils.isEmpty(wrapper.getDescription()))
+                share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
+
+            fragment.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.YouTube.YOUTUBE_REQUEST_CODE);
+
         }
+    }
 
+    @Override
+    public void destroy() {
+        unregister();
     }
 
 }

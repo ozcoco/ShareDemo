@@ -1,7 +1,10 @@
 package com.xdynamics.share;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,14 +20,17 @@ import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.xdynamics.share.bean.YouTubeContentWrapper;
 import com.xdynamics.share.databinding.ActivityMainBinding;
 import com.xdynamics.share.services.NotificationCollectorService;
+import com.xdynamics.share.utils.MediaStoreUtils;
 
 import org.oz.utils.Ts;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -122,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.equals(mBinding.btnUi)) {
 
             share2();
+        } else if (v.equals(mBinding.btnShareYoutube)) {
+            shareToYoutube();
         } else {
             share();
         }
@@ -364,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         ShareContent content = new ShareContent.Builder()
-                .setType(ShareContent.Type.IMAGE)
+                .setType(ShareContent.Type.VIDEO)
                 .addImage(mediaPath)
                 .addImage(mediaPath2)
                 .addVideo(mediaPath3)
@@ -379,7 +387,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void shareImageToInstagram() {
 
         String type = "image/*";
-        String filename = "DCIM/Camera/IMG_20181124_190200.jpg";
+
+        String filename = "/test2.jpg";
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
         createInstagramIntent(type, mediaPath);
     }
@@ -388,8 +397,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void shareVideoToInstagram() {
 
         String type = "video/*";
-        String filename = "DCIM/Camera/VID_20190227_073228.mp4";
+
+        String filename = "/vtest.mp4";
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
+
         createInstagramIntent(type, mediaPath);
 
     }
@@ -422,6 +433,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Intent intent = intentBuilder.createChooserIntent();
 
+        intent.setPackage("com.instagram.android");
+
+//        intent.setComponent(new ComponentName("com.instagram.android", "com.instagram.share.handleractivity.ShareHandlerActivity"));
+
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
 //        intentBuilder.startChooser();
@@ -429,6 +444,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
 
     }
+
+
+    private void shareToYoutube() {
+
+        String filename = "/vtest.mp4";
+
+        String mediaPath = Environment.getExternalStorageDirectory() + filename;
+
+        ShareContent content = new ShareContent.Builder()
+                .setType(ShareContent.Type.VIDEO)
+                .setContentWrapper(new YouTubeContentWrapper.Builder().setVideoPath(mediaPath).setTitle("海鸟").setTags("#海鸟").setDescription("海鸟视频").build())
+                .setPostId(UUID.randomUUID().toString())
+                .build();
+
+        ShareUtils.showShare(this, content, shareCallback);
+
+//        toYouTube(MediaStoreUtils.queryUriForVideo(this, mediaPath));
+
+    }
+
+
+    void toYouTube(Uri uri) {
+
+        Log.e("uri----->", uri.toString());
+
+        final String type = "video/*";
+
+        final String pkg = "com.google.android.youtube";
+
+        Intent share = new Intent(Intent.ACTION_SEND);
+
+        share.setType(type);
+
+        PackageManager packageManager = getPackageManager();
+
+        @SuppressLint("WrongConstant") List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(share, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
+
+        ResolveInfo resolveInfo = null;
+
+        for (ResolveInfo info : resolveInfos) {
+            if (pkg.equals(info.activityInfo.packageName)) {
+                resolveInfo = info;
+                break;
+            }
+        }
+
+        share.putExtra(android.content.Intent.EXTRA_STREAM, uri);
+
+        assert resolveInfo != null;
+        share.setClassName("com.google.android.youtube", resolveInfo.activityInfo.name);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
+
+        share.putExtra(Intent.EXTRA_TITLE, "video share");
+
+        share.putExtra(Intent.EXTRA_TEXT, "video share112376787775576856545675566557656");
+
+        share.putExtra(Intent.EXTRA_SUBJECT, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+        startActivityForResult(Intent.createChooser(share, "share to"), TWEET_COMPOSER_REQUEST_CODE);
+    }
+
 
 }
 
