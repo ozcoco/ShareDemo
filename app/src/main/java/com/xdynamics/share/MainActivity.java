@@ -20,10 +20,10 @@ import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.xdynamics.share.bean.InstagramContentWrapper;
 import com.xdynamics.share.bean.YouTubeContentWrapper;
 import com.xdynamics.share.databinding.ActivityMainBinding;
 import com.xdynamics.share.services.NotificationCollectorService;
-import com.xdynamics.share.utils.MediaStoreUtils;
 
 import org.oz.utils.Ts;
 
@@ -386,22 +386,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void shareImageToInstagram() {
 
-        String type = "image/*";
+//        String type = "image/*";
+//
+//        String filename = "/test2.jpg";
+//        String mediaPath = Environment.getExternalStorageDirectory() + filename;
+//        createInstagramIntent(type, mediaPath);
 
         String filename = "/test2.jpg";
+
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
-        createInstagramIntent(type, mediaPath);
+
+        ShareContent content = new ShareContent.Builder()
+                .setType(ShareContent.Type.IMAGE)
+                .setContentWrapper(new InstagramContentWrapper.Builder().setMediaPath(mediaPath).setTitle("海鸟").setTags("#海鸟").setDescription("海鸟视频").build())
+                .setPostId(UUID.randomUUID().toString())
+                .build();
+
+        ShareUtils.showShare(this, content, shareCallback);
+
     }
 
 
     public void shareVideoToInstagram() {
 
-        String type = "video/*";
-
         String filename = "/vtest.mp4";
+
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
 
-        createInstagramIntent(type, mediaPath);
+        ShareContent content = new ShareContent.Builder()
+                .setType(ShareContent.Type.VIDEO)
+                .setContentWrapper(new InstagramContentWrapper.Builder().setMediaPath(mediaPath).setTitle("海鸟").setTags("#海鸟").setDescription("海鸟视频").build())
+                .setPostId(UUID.randomUUID().toString())
+                .build();
+
+        ShareUtils.showShare(this, content, shareCallback);
 
     }
 

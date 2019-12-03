@@ -106,7 +106,7 @@ public class YouToShare implements Destroyable {
     }
 
 
-    public YouToShare(Activity activity, ShareContent content, ShareCallback callback) throws NullPointerException {
+    public YouToShare(Activity activity, ShareContent content, ShareCallback callback) throws IllegalArgumentException {
 
         if (activity == null)
             throw new IllegalArgumentException("activity != null ");
@@ -121,7 +121,7 @@ public class YouToShare implements Destroyable {
         init(callback);
     }
 
-    public YouToShare(Fragment fragment, ShareContent content, ShareCallback callback) throws NullPointerException {
+    public YouToShare(Fragment fragment, ShareContent content, ShareCallback callback) throws IllegalArgumentException {
 
         if (fragment == null)
             throw new IllegalArgumentException("fragment != null ");
@@ -144,7 +144,7 @@ public class YouToShare implements Destroyable {
                 @Override
                 public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 
-                    if (requestCode == Constants.YouTube.YOUTUBE_REQUEST_CODE) {
+                    if (requestCode == Constants.YouTube.REQUEST_CODE) {
 
                         if (resultCode == Activity.RESULT_CANCELED) {
                             callback.onCancel();
@@ -206,7 +206,7 @@ public class YouToShare implements Destroyable {
             if (!TextUtils.isEmpty(wrapper.getDescription()))
                 share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
 
-            activity.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.YouTube.YOUTUBE_REQUEST_CODE);
+            activity.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.YouTube.REQUEST_CODE);
 
         } else {
 
@@ -243,7 +243,7 @@ public class YouToShare implements Destroyable {
             if (!TextUtils.isEmpty(wrapper.getDescription()))
                 share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
 
-            fragment.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.YouTube.YOUTUBE_REQUEST_CODE);
+            fragment.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.YouTube.REQUEST_CODE);
 
         }
     }

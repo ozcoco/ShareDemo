@@ -25,7 +25,7 @@ public interface Constants {
 
         String CALLBACK_RECEIVER_ACTION = "com.xdynamics.share.TwitterShare.CALLBACK_RECEIVER_ACTION";
 
-        short TWEET_COMPOSER_REQUEST_CODE = 0x123;
+        short REQUEST_CODE = 0x123;
 
         String ERROR_DUPLICATE_TWEET = "ERROR_DUPLICATE_TWEET";
     }
@@ -35,8 +35,21 @@ public interface Constants {
 
         String packageName = "com.google.android.youtube";
 
-        short YOUTUBE_REQUEST_CODE = 0x124;
+        short REQUEST_CODE = 0x124;
 
     }
+
+    interface Instagram {
+
+        String packageName = "com.instagram.android";
+
+        String shareImageActivityName = "com.instagram.share.handleractivity.ShareHandlerActivity";
+        
+        String shareVideoActivityName = "com.instagram.share.handleractivity.ShareHandlerActivity";
+
+        short REQUEST_CODE = 0x125;
+
+    }
+
 
 }

@@ -48,6 +48,10 @@ public class ShareUtils {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+
+                InstagramShare share = new InstagramShare(activity, content, callback);
+
+                share.show();
             }
         });
 
@@ -117,6 +121,10 @@ public class ShareUtils {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+
+                InstagramShare share = new InstagramShare(fragment, content, callback);
+
+                share.show();
             }
         });
 

@@ -146,7 +146,7 @@ public class TwitterShare implements Destroyable {
                 @Override
                 public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 
-                    if (requestCode == Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE) {
+                    if (requestCode == Constants.Twitter.REQUEST_CODE) {
 
                         if (resultCode == Activity.RESULT_CANCELED) {
                             callback.onCancel();
@@ -195,7 +195,7 @@ public class TwitterShare implements Destroyable {
                 final Intent intent = builder.createIntent();
 
 
-                activity.get().startActivityForResult(intent, Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE);
+                activity.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
             } else {
 
@@ -205,7 +205,7 @@ public class TwitterShare implements Destroyable {
 
                 final Intent intent = builder.createIntent();
 
-                fragment.get().startActivityForResult(intent, Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE);
+                fragment.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
             }
 
         } catch (MalformedURLException e) {
@@ -245,7 +245,7 @@ public class TwitterShare implements Destroyable {
 
             final Intent intent = builder.createIntent();
 
-            activity.get().startActivityForResult(intent, Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE);
+            activity.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
         } else {
 
@@ -275,7 +275,7 @@ public class TwitterShare implements Destroyable {
 
             final Intent intent = builder.createIntent();
 
-            fragment.get().startActivityForResult(intent, Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE);
+            fragment.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
         }
 
@@ -312,7 +312,7 @@ public class TwitterShare implements Destroyable {
 
             final Intent intent = builder.createIntent();
 
-            activity.get().startActivityForResult(intent, Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE);
+            activity.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
         } else {
 
@@ -342,7 +342,7 @@ public class TwitterShare implements Destroyable {
 
             final Intent intent = builder.createIntent();
 
-            fragment.get().startActivityForResult(intent, Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE);
+            fragment.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
         }
     }
@@ -379,7 +379,7 @@ public class TwitterShare implements Destroyable {
 
             final Intent intent = builder.createIntent();
 
-            activity.get().startActivityForResult(intent, Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE);
+            activity.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
         } else {
 
@@ -409,7 +409,7 @@ public class TwitterShare implements Destroyable {
 
             final Intent intent = builder.createIntent();
 
-            fragment.get().startActivityForResult(intent, Constants.Twitter.TWEET_COMPOSER_REQUEST_CODE);
+            fragment.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
         }
     }
