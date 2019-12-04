@@ -20,8 +20,7 @@ import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
-import com.xdynamics.share.bean.InstagramContentWrapper;
-import com.xdynamics.share.bean.YouTubeContentWrapper;
+import com.xdynamics.share.bean.ShareContent;
 import com.xdynamics.share.databinding.ActivityMainBinding;
 import com.xdynamics.share.services.NotificationCollectorService;
 
@@ -121,9 +120,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            shareToTwitter();
         } else if (v.equals(mBinding.btnShareInstagram)) {
 
-            shareImageToInstagram();
+//            shareImageToInstagram();
 
-//            shareVideoToInstagram();
+            shareVideoToInstagram();
 
         } else if (v.equals(mBinding.btnUi)) {
 
@@ -153,12 +152,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareImage() {
 
+        String img = "/test2.jpg";
+        String img2 = "/DCIM/Camera/IMG_20190130_072247.jpg";
+        String mediaPath = Environment.getExternalStorageDirectory() + img;
+        String mediaPath2 = Environment.getExternalStorageDirectory() + img2;
+
         ShareContent content = new ShareContent.Builder()
                 .setType(ShareContent.Type.IMAGE)
                 .addImage(BitmapFactory.decodeResource(getResources(), R.mipmap.q))
                 .addImage(BitmapFactory.decodeResource(getResources(), R.mipmap.w))
-                .addImage(BitmapFactory.decodeResource(getResources(), R.mipmap.e))
-                .addImage(BitmapFactory.decodeResource(getResources(), R.mipmap.r))
+                .addImage(mediaPath)
+                .addImage(mediaPath2)
                 .setPostId(UUID.randomUUID().toString())
                 .build();
 
@@ -168,13 +172,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareMedia() {
 
+        String img = "/test2.jpg";
+        String img2 = "/DCIM/Camera/IMG_20190130_072247.jpg";
+        String mediaPath = Environment.getExternalStorageDirectory() + img;
+        String mediaPath2 = Environment.getExternalStorageDirectory() + img2;
+
+        String v = "/vtest.mp4";
+        String mediaPath3 = Environment.getExternalStorageDirectory() + v;
+        String v2 = "/DCIM/Camera/VID_20190227_073108.mp4";
+        String mediaPath4 = Environment.getExternalStorageDirectory() + v2;
+
         ShareContent content = new ShareContent.Builder()
                 .setType(ShareContent.Type.MEDIA)
                 .addImage(BitmapFactory.decodeResource(getResources(), R.mipmap.q))
                 .addImage(BitmapFactory.decodeResource(getResources(), R.mipmap.w))
-                .addImage(BitmapFactory.decodeResource(getResources(), R.mipmap.e))
-                .addImage(BitmapFactory.decodeResource(getResources(), R.mipmap.r))
-                .addVideo("/storage/emulated/0/DCIM/Camera/VID_20190227_073108.mp4")
+                .addImage(mediaPath)
+                .addImage(mediaPath2)
+                .addVideo(mediaPath3)
+                .addVideo(mediaPath4)
                 .setPostId(UUID.randomUUID().toString())
                 .build();
 
@@ -185,9 +200,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareVideo() {
 
+        String v = "/vtest.mp4";
+        String mediaPath3 = Environment.getExternalStorageDirectory() + v;
+        String v2 = "/DCIM/Camera/VID_20190227_073108.mp4";
+        String mediaPath4 = Environment.getExternalStorageDirectory() + v2;
+
         ShareContent content = new ShareContent.Builder()
                 .setType(ShareContent.Type.VIDEO)
-                .addVideo("/storage/emulated/0/DCIM/Camera/VID_20190227_073108.mp4")
+                .addVideo(mediaPath3)
+                .addVideo(mediaPath4)
                 .setPostId(UUID.randomUUID().toString())
                 .build();
 
@@ -376,6 +397,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .addImage(mediaPath)
                 .addImage(mediaPath2)
                 .addVideo(mediaPath3)
+                .setTitle("海鸟")
+                .setSubject("海鸟视频")
+                .setText("#海鸟")
                 .setPostId(UUID.randomUUID().toString())
                 .build();
 
@@ -386,19 +410,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void shareImageToInstagram() {
 
-//        String type = "image/*";
-//
-//        String filename = "/test2.jpg";
-//        String mediaPath = Environment.getExternalStorageDirectory() + filename;
-//        createInstagramIntent(type, mediaPath);
-
         String filename = "/test2.jpg";
 
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
 
         ShareContent content = new ShareContent.Builder()
+                .addImage(mediaPath)
+                .setTitle("海鸟")
+                .setSubject("海鸟视频")
+                .setText("#海鸟")
                 .setType(ShareContent.Type.IMAGE)
-                .setContentWrapper(new InstagramContentWrapper.Builder().setMediaPath(mediaPath).setTitle("海鸟").setTags("#海鸟").setDescription("海鸟视频").build())
                 .setPostId(UUID.randomUUID().toString())
                 .build();
 
@@ -414,8 +435,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
 
         ShareContent content = new ShareContent.Builder()
+                .addVideo(mediaPath)
+                .setTitle("海鸟")
+                .setSubject("海鸟视频")
+                .setText("#海鸟")
                 .setType(ShareContent.Type.VIDEO)
-                .setContentWrapper(new InstagramContentWrapper.Builder().setMediaPath(mediaPath).setTitle("海鸟").setTags("#海鸟").setDescription("海鸟视频").build())
                 .setPostId(UUID.randomUUID().toString())
                 .build();
 
@@ -471,8 +495,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
 
         ShareContent content = new ShareContent.Builder()
+                .addVideo(mediaPath)
+                .setTitle("海鸟")
+                .setSubject("海鸟视频")
+                .setText("#海鸟")
                 .setType(ShareContent.Type.VIDEO)
-                .setContentWrapper(new YouTubeContentWrapper.Builder().setVideoPath(mediaPath).setTitle("海鸟").setTags("#海鸟").setDescription("海鸟视频").build())
                 .setPostId(UUID.randomUUID().toString())
                 .build();
 
@@ -511,8 +538,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         share.putExtra(android.content.Intent.EXTRA_STREAM, uri);
 
         assert resolveInfo != null;
-        share.setClassName("com.google.android.youtube", resolveInfo.activityInfo.name);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
-
+        share.setClassName("com.google.android.youtube", resolveInfo.activityInfo.name);
         share.putExtra(Intent.EXTRA_TITLE, "video share");
 
         share.putExtra(Intent.EXTRA_TEXT, "video share112376787775576856545675566557656");
@@ -521,52 +547,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         startActivityForResult(Intent.createChooser(share, "share to"), TWEET_COMPOSER_REQUEST_CODE);
     }
-
-
-}
-
-
-class de {
-/*
-
-    private void startYouTubeShare() {
-
-        String mediaPath = gallery.getLocalPath();
-        String videoName = editText.getText().toString();
-        if (!TextUtils.isEmpty(mChosenAccountName) && !TextUtils.isEmpty(mediaPath)) {
-            if (mediaPath != null) {
-                Intent uploadIntent = new Intent(getContext(), UploadService.class);
-                uploadIntent.setData(Uri.fromFile(new File(mediaPath)));
-                uploadIntent.putExtra("gAcName", mChosenAccountName);
-                uploadIntent.putExtra("videoname", videoName);
-                getActivity().startService(uploadIntent);
-                setBottomOn();
-                // getActivity().finish();
-            }
-
-        }
-    }
-
-
-    private void createInstagramIntent() {
-        String type;
-        String mediaPath = gallery.getLocalPath();
-
-        if (VideoUtil.isVideo(mediaPath)) {
-            type = "video/*";
-        } else {
-            type = "image/*";
-        }
-        Intent share = new Intent();
-        share.setType(type);
-        File media = new File(mediaPath);
-        Uri uri = Uri.fromFile(media);
-        share.setComponent(new ComponentName("com.instagram.android", "com.instagram.share.handleractivity.ShareHandlerActivity"));
-        share.putExtra(Intent.EXTRA_STREAM, uri);
-        startActivity(share);
-
-    }
-*/
 
 
 }

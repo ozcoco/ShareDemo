@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.xdynamics.share.bean.ShareContent;
 import com.xdynamics.share.bean.YouTubeContentWrapper;
 import com.xdynamics.share.services.ShareNotificationHandle;
 import com.xdynamics.share.utils.MediaStoreUtils;
@@ -171,11 +172,21 @@ public class YouToShare implements Destroyable {
 
     private void shareVideo() {
 
+        Intent share = new Intent(Intent.ACTION_SEND);
+
+        share.setType(Constants.MEDIA_TYPE_VIDEO);
+
+        if (!TextUtils.isEmpty(content.getTitle()))
+            share.putExtra(Intent.EXTRA_TITLE, content.getTitle());
+
+        if (!TextUtils.isEmpty(content.getText()))
+            share.putExtra(Intent.EXTRA_TEXT, content.getText());
+
+        if (!TextUtils.isEmpty(content.getSubject()))
+            share.putExtra(Intent.EXTRA_SUBJECT, content.getSubject());
+
+
         if (activity != null && activity.get() != null) {
-
-            Intent share = new Intent(Intent.ACTION_SEND);
-
-            share.setType(Constants.MEDIA_TYPE_VIDEO);
 
             PackageManager packageManager = activity.get().getPackageManager();
 
@@ -190,31 +201,17 @@ public class YouToShare implements Destroyable {
                 }
             }
 
-            final YouTubeContentWrapper wrapper = (YouTubeContentWrapper) content.getContentWrapper();
-
-            share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(activity.get().getApplication(), wrapper.getVideoPath()));
+            if (!content.getVideoPathList().isEmpty())
+                share.putExtra(Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(activity.get().getApplication(), content.getVideoPathList().get(0)));
 
             assert resolveInfo != null;
-            share.setClassName(Constants.YouTube.packageName, resolveInfo.activityInfo.name);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
+            share.setClassName(Constants.YouTube.packageName, resolveInfo.activityInfo.name);
 
-            if (!TextUtils.isEmpty(wrapper.getTitle()))
-                share.putExtra(Intent.EXTRA_TITLE, wrapper.getTitle());
-
-            if (!TextUtils.isEmpty(wrapper.getTags()))
-                share.putExtra(Intent.EXTRA_TEXT, wrapper.getTags());
-
-            if (!TextUtils.isEmpty(wrapper.getDescription()))
-                share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
-
-            activity.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.YouTube.REQUEST_CODE);
+            activity.get().startActivityForResult(Intent.createChooser(share, content.getTitle()), Constants.YouTube.REQUEST_CODE);
 
         } else {
 
-            Intent share = new Intent(Intent.ACTION_SEND);
-
-            share.setType(Constants.MEDIA_TYPE_VIDEO);
-
-            PackageManager packageManager = fragment.get().getContext().getPackageManager();
+            PackageManager packageManager = Objects.requireNonNull(fragment.get().getContext()).getPackageManager();
 
             @SuppressLint("WrongConstant") List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(share, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
 
@@ -227,23 +224,14 @@ public class YouToShare implements Destroyable {
                 }
             }
 
-            final YouTubeContentWrapper wrapper = (YouTubeContentWrapper) content.getContentWrapper();
+            if (!content.getVideoPathList().isEmpty())
+                share.putExtra(Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(fragment.get().getContext(), content.getVideoPathList().get(0)));
 
-            share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(fragment.get().getContext(), wrapper.getVideoPath()));
 
             assert resolveInfo != null;
-            share.setClassName(Constants.YouTube.packageName, resolveInfo.activityInfo.name);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
+            share.setClassName(Constants.YouTube.packageName, resolveInfo.activityInfo.name);
 
-            if (!TextUtils.isEmpty(wrapper.getTitle()))
-                share.putExtra(Intent.EXTRA_TITLE, wrapper.getTitle());
-
-            if (!TextUtils.isEmpty(wrapper.getTags()))
-                share.putExtra(Intent.EXTRA_TEXT, wrapper.getTags());
-
-            if (!TextUtils.isEmpty(wrapper.getDescription()))
-                share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
-
-            fragment.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.YouTube.REQUEST_CODE);
+            fragment.get().startActivityForResult(Intent.createChooser(share, content.getTitle()), Constants.YouTube.REQUEST_CODE);
 
         }
     }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 import com.xdynamics.R;
+import com.xdynamics.share.bean.ShareContent;
 
 import java.util.Objects;
 

@@ -15,6 +15,7 @@ import com.facebook.share.model.ShareMediaContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.ShareVideo;
 import com.facebook.share.widget.ShareDialog;
+import com.xdynamics.share.bean.ShareContent;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

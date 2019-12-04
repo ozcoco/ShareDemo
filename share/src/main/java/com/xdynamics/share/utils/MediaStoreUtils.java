@@ -67,6 +67,9 @@ public class MediaStoreUtils {
                         .getColumnIndex(MediaStore.Video.Media._ID));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
+
         return id;
     }
 
@@ -130,6 +133,9 @@ public class MediaStoreUtils {
                         .getColumnIndex(MediaStore.Images.Media._ID));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
+
         return id;
     }
 

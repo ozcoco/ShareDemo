@@ -1,8 +1,6 @@
-package com.xdynamics.share;
+package com.xdynamics.share.bean;
 
 import android.graphics.Bitmap;
-
-import com.xdynamics.share.bean.ContentWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +22,17 @@ public class ShareContent {
 
     private String quote;   //摘要
 
-    private List<Bitmap> imageBitmapList;
+    private List<Bitmap> imageBitmapList;   //facebook(可选)
 
-    private List<String> videoPathList;
+    private List<String> videoPathList;     //通用
 
-    private List<String> imagePathList;
+    private List<String> imagePathList;     //通用
 
-    private ContentWrapper contentWrapper;
+    private String title;
+
+    private String subject;
+
+    private String text;
 
     private ShareContent() {
     }
@@ -63,8 +65,16 @@ public class ShareContent {
         return imagePathList;
     }
 
-    public ContentWrapper getContentWrapper() {
-        return contentWrapper;
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public static class Builder {
@@ -83,7 +93,26 @@ public class ShareContent {
 
         private List<String> imagePathList = new ArrayList<>();
 
-        private ContentWrapper contentWrapper;
+        private String title;
+
+        private String subject;
+
+        private String text;
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setSubject(String subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        public Builder setText(String text) {
+            this.text = text;
+            return this;
+        }
 
         public Builder setPostId(String postId) {
             this.postId = postId;
@@ -151,11 +180,6 @@ public class ShareContent {
             return this;
         }
 
-        public Builder setContentWrapper(ContentWrapper contentWrapper) {
-            this.contentWrapper = contentWrapper;
-            return this;
-        }
-
         public ShareContent build() {
 
             if (type == null) throw new NullPointerException(" type != null");
@@ -179,7 +203,11 @@ public class ShareContent {
 
             content.imagePathList = imagePathList;
 
-            content.contentWrapper = contentWrapper;
+            content.title = title;
+
+            content.subject = subject;
+
+            content.text = text;
 
             return content;
 

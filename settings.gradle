@@ -1,2 +1,2 @@
-include ':app', ':share'
+include ':app', ':share', ':connector'
 rootProject.name='ShareDemo'

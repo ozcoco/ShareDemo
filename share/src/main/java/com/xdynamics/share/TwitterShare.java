@@ -12,7 +12,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.xdynamics.share.bean.ShareContent;
 import com.xdynamics.share.services.ShareNotificationHandle;
+import com.xdynamics.share.utils.MediaStoreUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -194,7 +196,6 @@ public class TwitterShare implements Destroyable {
 
                 final Intent intent = builder.createIntent();
 
-
                 activity.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
             } else {
@@ -222,13 +223,15 @@ public class TwitterShare implements Destroyable {
 
             for (String path : content.getImagePathList()) {
 
-                uris.add(FileProvider.getUriForFile(activity.get(), activity.get().getPackageName() + ".fileProvider", new File(path)));
+//                uris.add(FileProvider.getUriForFile(activity.get(), activity.get().getPackageName() + ".fileProvider", new File(path)));
+
+                uris.add(MediaStoreUtils.queryUriForImage(activity.get().getApplication(), path));
             }
 
             TweetComposer.Builder builder = new TweetComposer.Builder(activity.get());
 
-            if (!TextUtils.isEmpty(content.getQuote()))
-                builder.text(content.getQuote());
+            if (!TextUtils.isEmpty(content.getText()))
+                builder.text(content.getText());
 
             if (!TextUtils.isEmpty(content.getLink())) {
                 try {
@@ -253,13 +256,15 @@ public class TwitterShare implements Destroyable {
 
             for (String path : content.getImagePathList()) {
 
-                uris.add(FileProvider.getUriForFile(fragment.get().getContext(), fragment.get().getContext().getPackageName() + ".fileProvider", new File(path)));
+//                uris.add(FileProvider.getUriForFile(fragment.get().getContext(), fragment.get().getContext().getPackageName() + ".fileProvider", new File(path)));
+
+                uris.add(MediaStoreUtils.queryUriForImage(fragment.get().getContext(), path));
             }
 
-            TweetComposer.Builder builder = new TweetComposer.Builder(fragment.get().getContext());
+            TweetComposer.Builder builder = new TweetComposer.Builder(Objects.requireNonNull(fragment.get().getContext()));
 
-            if (!TextUtils.isEmpty(content.getQuote()))
-                builder.text(content.getQuote());
+            if (!TextUtils.isEmpty(content.getText()))
+                builder.text(content.getText());
 
             if (!TextUtils.isEmpty(content.getLink())) {
                 try {
@@ -289,13 +294,15 @@ public class TwitterShare implements Destroyable {
 
             for (String path : content.getImagePathList()) {
 
-                uris.add(FileProvider.getUriForFile(activity.get(), activity.get().getPackageName() + ".fileProvider", new File(path)));
+//                uris.add(FileProvider.getUriForFile(activity.get(), activity.get().getPackageName() + ".fileProvider", new File(path)));
+
+                uris.add(MediaStoreUtils.queryUriForImage(activity.get().getApplication(), path));
             }
 
             TweetComposer.Builder builder = new TweetComposer.Builder(activity.get());
 
-            if (!TextUtils.isEmpty(content.getQuote()))
-                builder.text(content.getQuote());
+            if (!TextUtils.isEmpty(content.getText()))
+                builder.text(content.getText());
 
             if (!TextUtils.isEmpty(content.getLink())) {
                 try {
@@ -320,10 +327,12 @@ public class TwitterShare implements Destroyable {
 
             for (String path : content.getImagePathList()) {
 
-                uris.add(FileProvider.getUriForFile(fragment.get().getContext(), fragment.get().getContext().getPackageName() + ".fileProvider", new File(path)));
+//                uris.add(FileProvider.getUriForFile(fragment.get().getContext(), fragment.get().getContext().getPackageName() + ".fileProvider", new File(path)));
+
+                uris.add(MediaStoreUtils.queryUriForImage(fragment.get().getContext(), path));
             }
 
-            TweetComposer.Builder builder = new TweetComposer.Builder(fragment.get().getContext());
+            TweetComposer.Builder builder = new TweetComposer.Builder(Objects.requireNonNull(fragment.get().getContext()));
 
             if (!TextUtils.isEmpty(content.getQuote()))
                 builder.text(content.getQuote());
@@ -356,13 +365,15 @@ public class TwitterShare implements Destroyable {
 
             for (String path : content.getVideoPathList()) {
 
-                uris.add(FileProvider.getUriForFile(activity.get(), activity.get().getPackageName() + ".fileProvider", new File(path)));
+//                uris.add(FileProvider.getUriForFile(activity.get(), activity.get().getPackageName() + ".fileProvider", new File(path)));
+
+                uris.add(MediaStoreUtils.queryUriForVideo(activity.get().getApplication(), path));
             }
 
             TweetComposer.Builder builder = new TweetComposer.Builder(activity.get());
 
-            if (!TextUtils.isEmpty(content.getQuote()))
-                builder.text(content.getQuote());
+            if (!TextUtils.isEmpty(content.getText()))
+                builder.text(content.getText());
 
             if (!TextUtils.isEmpty(content.getLink())) {
                 try {
@@ -378,6 +389,17 @@ public class TwitterShare implements Destroyable {
 
 
             final Intent intent = builder.createIntent();
+            /****  test ****/
+            if (!TextUtils.isEmpty(content.getTitle()))
+                intent.putExtra(Intent.EXTRA_TITLE, content.getTitle());
+
+            if (!TextUtils.isEmpty(content.getText()))
+                intent.putExtra(Intent.EXTRA_TEXT, content.getText());
+
+            if (!TextUtils.isEmpty(content.getSubject()))
+                intent.putExtra(Intent.EXTRA_SUBJECT, content.getSubject());
+            /****  test ****/
+
 
             activity.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 
@@ -387,13 +409,15 @@ public class TwitterShare implements Destroyable {
 
             for (String path : content.getVideoPathList()) {
 
-                uris.add(FileProvider.getUriForFile(fragment.get().getContext(), fragment.get().getContext().getPackageName() + ".fileProvider", new File(path)));
+//                uris.add(FileProvider.getUriForFile(fragment.get().getContext(), fragment.get().getContext().getPackageName() + ".fileProvider", new File(path)));
+
+                uris.add(MediaStoreUtils.queryUriForVideo(fragment.get().getContext(), path));
             }
 
-            TweetComposer.Builder builder = new TweetComposer.Builder(fragment.get().getContext());
+            TweetComposer.Builder builder = new TweetComposer.Builder(Objects.requireNonNull(fragment.get().getContext()));
 
-            if (!TextUtils.isEmpty(content.getQuote()))
-                builder.text(content.getQuote());
+            if (!TextUtils.isEmpty(content.getText()))
+                builder.text(content.getText());
 
             if (!TextUtils.isEmpty(content.getLink())) {
                 try {
@@ -408,6 +432,17 @@ public class TwitterShare implements Destroyable {
             }
 
             final Intent intent = builder.createIntent();
+
+            /****  test ****/
+            if (!TextUtils.isEmpty(content.getTitle()))
+                intent.putExtra(Intent.EXTRA_TITLE, content.getTitle());
+
+            if (!TextUtils.isEmpty(content.getText()))
+                intent.putExtra(Intent.EXTRA_TEXT, content.getText());
+
+            if (!TextUtils.isEmpty(content.getSubject()))
+                intent.putExtra(Intent.EXTRA_SUBJECT, content.getSubject());
+            /****  test ****/
 
             fragment.get().startActivityForResult(intent, Constants.Twitter.REQUEST_CODE);
 

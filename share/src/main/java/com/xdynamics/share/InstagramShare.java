@@ -11,9 +11,9 @@ import android.content.pm.ResolveInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.xdynamics.share.bean.InstagramContentWrapper;
+import com.xdynamics.share.bean.ShareContent;
 import com.xdynamics.share.services.ShareNotificationHandle;
 import com.xdynamics.share.utils.MediaStoreUtils;
 
@@ -176,51 +176,34 @@ public class InstagramShare implements Destroyable {
 
     private void shareImage() {
 
+        Intent share = new Intent(Intent.ACTION_SEND);
+
+        share.setType(Constants.MEDIA_TYPE_IMAGE);
+
+        share.setClassName(Constants.Instagram.packageName, Constants.Instagram.shareImageActivityName);
+
+        if (!TextUtils.isEmpty(content.getTitle()))
+            share.putExtra(Intent.EXTRA_TITLE, content.getTitle());
+
+        if (!TextUtils.isEmpty(content.getText()))
+            share.putExtra(Intent.EXTRA_TEXT, content.getText());
+
+        if (!TextUtils.isEmpty(content.getSubject()))
+            share.putExtra(Intent.EXTRA_SUBJECT, content.getSubject());
+
         if (activity != null && activity.get() != null) {
 
-            Intent share = new Intent(Intent.ACTION_SEND);
+            if (!content.getImagePathList().isEmpty())
+                share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForImage(activity.get().getApplication(), content.getImagePathList().get(0)));
 
-            share.setType(Constants.MEDIA_TYPE_IMAGE);
-
-            final InstagramContentWrapper wrapper = (InstagramContentWrapper) content.getContentWrapper();
-
-            share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForImage(activity.get().getApplication(), wrapper.getMediaPath()));
-
-            share.setClassName(Constants.Instagram.packageName, Constants.Instagram.shareVideoActivityName);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
-
-            if (!TextUtils.isEmpty(wrapper.getTitle()))
-                share.putExtra(Intent.EXTRA_TITLE, wrapper.getTitle());
-
-            if (!TextUtils.isEmpty(wrapper.getTags()))
-                share.putExtra(Intent.EXTRA_TEXT, wrapper.getTags());
-
-            if (!TextUtils.isEmpty(wrapper.getDescription()))
-                share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
-
-            activity.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.Instagram.REQUEST_CODE);
+            activity.get().startActivityForResult(Intent.createChooser(share, content.getTitle()), Constants.Instagram.REQUEST_CODE);
 
         } else {
 
-            Intent share = new Intent(Intent.ACTION_SEND);
+            if (!content.getImagePathList().isEmpty())
+                share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForImage(fragment.get().getContext(), content.getImagePathList().get(0)));
 
-            share.setType(Constants.MEDIA_TYPE_VIDEO);
-
-            final InstagramContentWrapper wrapper = (InstagramContentWrapper) content.getContentWrapper();
-
-            share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForImage(activity.get().getApplication(), wrapper.getMediaPath()));
-
-            share.setClassName(Constants.Instagram.packageName, Constants.Instagram.shareVideoActivityName);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
-
-            if (!TextUtils.isEmpty(wrapper.getTitle()))
-                share.putExtra(Intent.EXTRA_TITLE, wrapper.getTitle());
-
-            if (!TextUtils.isEmpty(wrapper.getTags()))
-                share.putExtra(Intent.EXTRA_TEXT, wrapper.getTags());
-
-            if (!TextUtils.isEmpty(wrapper.getDescription()))
-                share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
-
-            fragment.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.Instagram.REQUEST_CODE);
+            fragment.get().startActivityForResult(Intent.createChooser(share, content.getTitle()), Constants.Instagram.REQUEST_CODE);
 
         }
 
@@ -228,79 +211,35 @@ public class InstagramShare implements Destroyable {
 
     private void shareVideo() {
 
+        Intent share = new Intent(Intent.ACTION_SEND);
+
+        share.setType(Constants.MEDIA_TYPE_VIDEO);
+
+        share.setClassName(Constants.Instagram.packageName, Constants.Instagram.shareVideoActivityName);
+
+        if (!TextUtils.isEmpty(content.getTitle()))
+            share.putExtra(Intent.EXTRA_TITLE, content.getTitle());
+
+        if (!TextUtils.isEmpty(content.getText()))
+            share.putExtra(Intent.EXTRA_TEXT, content.getText());
+
+        if (!TextUtils.isEmpty(content.getSubject()))
+            share.putExtra(Intent.EXTRA_SUBJECT, content.getSubject());
+
+
         if (activity != null && activity.get() != null) {
 
-            Intent share = new Intent(Intent.ACTION_SEND);
+            if (!content.getVideoPathList().isEmpty())
+                share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(activity.get().getApplication(), content.getVideoPathList().get(0)));
 
-            share.setType(Constants.MEDIA_TYPE_VIDEO);
-
-            PackageManager packageManager = activity.get().getPackageManager();
-
-            @SuppressLint("WrongConstant") List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(share, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
-
-            ResolveInfo resolveInfo = null;
-
-            for (ResolveInfo info : resolveInfos) {
-                if (Constants.Instagram.packageName.equals(info.activityInfo.packageName)) {
-                    resolveInfo = info;
-                    break;
-                }
-            }
-
-            final InstagramContentWrapper wrapper = (InstagramContentWrapper) content.getContentWrapper();
-
-            share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(activity.get().getApplication(), wrapper.getMediaPath()));
-
-            assert resolveInfo != null;
-            share.setClassName(Constants.Instagram.packageName, resolveInfo.activityInfo.name);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
-
-            if (!TextUtils.isEmpty(wrapper.getTitle()))
-                share.putExtra(Intent.EXTRA_TITLE, wrapper.getTitle());
-
-            if (!TextUtils.isEmpty(wrapper.getTags()))
-                share.putExtra(Intent.EXTRA_TEXT, wrapper.getTags());
-
-            if (!TextUtils.isEmpty(wrapper.getDescription()))
-                share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
-
-            activity.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.Instagram.REQUEST_CODE);
+            activity.get().startActivityForResult(Intent.createChooser(share, content.getTitle()), Constants.Instagram.REQUEST_CODE);
 
         } else {
 
-            Intent share = new Intent(Intent.ACTION_SEND);
+            if (!content.getVideoPathList().isEmpty())
+                share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(fragment.get().getContext(), content.getVideoPathList().get(0)));
 
-            share.setType(Constants.MEDIA_TYPE_VIDEO);
-
-            PackageManager packageManager = fragment.get().getContext().getPackageManager();
-
-            @SuppressLint("WrongConstant") List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(share, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT);
-
-            ResolveInfo resolveInfo = null;
-
-            for (ResolveInfo info : resolveInfos) {
-                if (Constants.Instagram.packageName.equals(info.activityInfo.packageName)) {
-                    resolveInfo = info;
-                    break;
-                }
-            }
-
-            final InstagramContentWrapper wrapper = (InstagramContentWrapper) content.getContentWrapper();
-
-            share.putExtra(android.content.Intent.EXTRA_STREAM, MediaStoreUtils.queryUriForVideo(fragment.get().getContext(), wrapper.getMediaPath()));
-
-            assert resolveInfo != null;
-            share.setClassName(Constants.Instagram.packageName, resolveInfo.activityInfo.name);//注意这里Activity名不能写死，因为有些app升级后分享页面的路径或者名称会更改(比如Instagram)
-
-            if (!TextUtils.isEmpty(wrapper.getTitle()))
-                share.putExtra(Intent.EXTRA_TITLE, wrapper.getTitle());
-
-            if (!TextUtils.isEmpty(wrapper.getTags()))
-                share.putExtra(Intent.EXTRA_TEXT, wrapper.getTags());
-
-            if (!TextUtils.isEmpty(wrapper.getDescription()))
-                share.putExtra(Intent.EXTRA_SUBJECT, wrapper.getDescription());
-
-            fragment.get().startActivityForResult(Intent.createChooser(share, wrapper.getTitle()), Constants.Instagram.REQUEST_CODE);
+            fragment.get().startActivityForResult(Intent.createChooser(share, content.getTitle()), Constants.Instagram.REQUEST_CODE);
 
         }
     }

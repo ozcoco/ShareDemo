@@ -2,6 +2,7 @@ package com.xdynamics.share;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.facebook.share.model.ShareMediaContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.ShareVideo;
 import com.facebook.share.widget.ShareDialog;
+import com.xdynamics.share.bean.ShareContent;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -159,13 +161,22 @@ public class FacebookShare {
 
             }
 
+            for (String path : content.getImagePathList()) {
+
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(BitmapFactory.decodeFile(path))
+                        .build();
+
+                builder.addMedium(photo);
+            }
+
             builder.setPageId(this.content.getPostId());
 
             shareDialog.show(builder.build(), ShareDialog.Mode.AUTOMATIC);
         }
 
-
     }
+
 
     private void shareMedia() {
 
@@ -180,7 +191,15 @@ public class FacebookShare {
                         .build();
 
                 builder.addMedium(photo);
+            }
 
+            for (String path : content.getImagePathList()) {
+
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(BitmapFactory.decodeFile(path))
+                        .build();
+
+                builder.addMedium(photo);
             }
 
             for (String path : this.content.getVideoPathList()) {
@@ -191,6 +210,7 @@ public class FacebookShare {
 
                 builder.addMedium(photo);
             }
+
             builder.setPageId(this.content.getPostId());
 
             shareDialog.show(builder.build(), ShareDialog.Mode.AUTOMATIC);
