@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<conf>
+	<webapi>
+		<domain>https://gs-china.xdynamics.com/xdsvrmgr/</domain>
+	</webapi>
+	<version>2.0.0.3</version>
+	<local_test>true</local_test>
+	<debug_log>false</debug_log>
+	<!-- 数据库存储定义 -->
+	<db_table>
+		<element>
+			<show>SOC板系列号</show>
+			<name>PCBID</name>
+			<type>C</type>
+			<length>32</length>
+			<default_value/>
+		</element>
+		<element>
+			<show>地面站系列号</show>
+			<name>SN</name>
+			<type>C</type>
+			<length>32</length>
+			<default_value/>
+		</element>
+		<!-- 以下定义要测试的项的内容,缺省的值-1 代表没有测试 -->
+		<!-- 1 -->
+		<element>
+			<show>5吋屏TP</show>
+			<name>TP_5</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<element>
+			<name>TP_5_Extra</name>
+			<type>C</type>
+			<length>1024</length>
+			<default/>
+		</element>
+		<!-- 2 -->
+		<element>
+			<show>LCD屏</show>
+			<name>LCD_5_7</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<!-- 3 -->
+		<element>
+			<show>LCD背光</show>
+			<name>LCD_Backlight</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<element>
+			<name>LCD_Backlight_Extra</name>
+			<type>C</type>
+			<length>1024</length>
+			<default/>
+		</element>
+		<!-- 4 -->
+		<element>
+			<show>话筒喇叭</show>
+			<name>Mic_Spk</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<!-- 5 -->
+		<element>
+			<show>照相机</show>
+			<name>Camera</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<!-- 6 -->
+		<element>
+			<show>HDMI输入输出</show>
+			<name>HDMI_IO</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<!-- 7 -->
+		<element>
+			<show>amimon USB</show>
+			<name>Amimon_USB</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<!-- 8 -->
+		<element>
+			<show>Wifi</show>
+			<name>Wifi</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<element>
+			<name>Wifi_Extra</name>
+			<type>C</type>
+			<length>1024</length>
+			<default/>
+		</element>
+		<!-- 9 -->
+		<element>
+			<show>蓝牙</show>
+			<name>BT</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<element>
+			<name>BT_Extra</name>
+			<type>C</type>
+			<length>1024</length>
+			<default/>
+		</element>
+		<!-- 10 -->
+		<element>
+			<show>罗盘</show>
+			<name>Compass</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<element>
+			<name>Compass_Extra</name>
+			<type>C</type>
+			<length>1024</length>
+			<default/>
+		</element>
+		<!-- 11 -->
+		<element>
+			<show>光感距感</show>
+			<name>Light_Proximity</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<element>
+			<name>Light_Proximity_Extra</name>
+			<type>C</type>
+			<length>1024</length>
+			<default/>
+		</element>
+		<!-- 12 -->
+		<element>
+			<show>陀螺仪</show>
+			<name>Gyroscope</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<element>
+			<name>Gyroscope_Extra</name>
+			<type>C</type>
+			<length>1024</length>
+			<default/>
+		</element>
+		<!-- 13 -->
+		<element>
+			<show>马达</show>
+			<name>Motor_Fan</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<!-- 14 -->
+		<element>
+			<show>amimon电压</show>
+			<name>Amimon_Voltage</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<!-- 15 -->
+		<element>
+			<show>GPS</show>
+			<name>GPS</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+		<!-- 16 -->
+		<element>
+			<show>RC USB</show>
+			<name>RC_USB</name>
+			<type>I2</type>
+			<default_value>-1</default_value>
+		</element>
+	</db_table>
+	<device>
+		<!-- 以下定义要测试设备的VID和PID-->
+		<vid>0E8D</vid>
+		<pid>201D</pid>
+	</device>
+	<!-- 定义PC与DUT的连接方式 -->
+	<connect>
+		<!-- 要连接设备时用到的ADB服务器转发的网络地址和端口号，此处由测试APP的定义者规定-->
+		<addr>127.0.0.1</addr>
+		<port>12580</port>
+	</connect>
+	<tool>
+		<!-- 此处定义ADB程序的路径-->
+		<adb_path>D:\adb\</adb_path>
+		<shell_flag>rk3399_mid:/ $</shell_flag>
+		<!-- 此处定义测试APP在本地的路径和名称-->
+		<apk_name>WiskyFactoryTools.apk</apk_name>
+		<!-- 本程序的日志文件, 含日志记录级别，存放位置，是否使用等 -->
+		<!-- 测试操作记录文件，含记录方式<本地文件方式，远程数据库方式> -->
+		<ui>
+			<max_show_items>16</max_show_items>
+			<!-- 如果pcbid_only为true,则表明测试处于没有装机前，PCB板只帖有PCBID的标签，
+			如果为false，则表明是装机后，系统已经帖有SN或写入SN -->
+			<pcbid_only>true</pcbid_only>
+			<!-- 如果pcbid_only为false的情况下，是由APK自动读取本机的SN，则sn_auto为true,
+			还是由工厂工人扫码读取SN，则sn_auto为false -->
+			<sn_auto>true</sn_auto>
+			<!-- 系列号的总长-->
+			<sn_length>16</sn_length>
+			<!-- 系列号前面不变的定义-->
+			<sn_prefix>D1202</sn_prefix>
+			<!-- 最后流水号位数 -->
+			<sn_width>7</sn_width>
+			<!-- PCB板ID的总长-->
+			<pcbid_length>16</pcbid_length>
+			<!-- 系列号前面不变的定义-->
+			<pcbid_prefix/>
+		</ui>
+	</tool>
+	<protocol store_order="Be">
+		<!-- 对于存储长度大于一的POD类型的数据，order表明它们的存储顺序，定义Be为Big-Endian,
+		Le为Little-Endian方式，不能定义其它类型，如果没有定义则为操作系统当前存储方式-->
+		<command>
+			<!-- 协议中的握手部分-->
+			<common name="handshake">
+				<req id="145"/>
+				<!-- 0x91 -->
+				<dut id="17">
+					<!-- 0x11 -->
+					<element name="proto_ver" type="uint8_t"/>
+					<element name="app_ver" type="uint8_t"/>
+				</dut>
+			</common>
+			<!-- 协议中的心跳包部分,可选 -->
+			<common name="heartbeat">
+				<req id="146"/>
+				<dut id="18"/>
+			</common>
+			<!-- 协议中的退出部分 可选-->
+			<common name="exit">
+				<req id="147"/>
+				<dut id="19"/>
+			</common>
+			<tests>
+				<test name="1) 5吋屏TP测试|5 inch vLCD TP" need="false" auto="false" retry="0">
+					<req id="129">
+						<element name="timeout" type="uint16_t">30</element>
+					</req>
+					<dut id="1">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+						<!-- 返回5点触摸的坐标值 -->
+						<element name="P1" type="D2_I16_Array"/>
+						<element name="P2" type="D2_I16_Array"/>
+						<element name="P3" type="D2_I16_Array"/>
+						<element name="P4" type="D2_I16_Array"/>
+						<element name="P5" type="D2_I16_Array"/>
+					</dut>
+				</test>
+				<test name="2) LCD屏(5吋&amp;&amp;7吋)测试|LCD(5&amp;7inch)" need="false" auto="false" retry="0">
+					<req id="130">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="2">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="5吋屏失败|5〃 FAILURE"/>
+							<enum value="2" name="7吋屏失败|7〃 FAILURE"/>
+							<enum value="3" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+				<test name="3) 背光亮度测试|LCD Backlight Brightness" need="false" auto="false" retry="0">
+					<req id="131">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="3">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="5吋屏失败|5〃 FAILURE"/>
+							<enum value="2" name="7吋屏失败|7〃 FAILURE"/>
+							<enum value="3" name="失败|FAILURE"/>
+						</element>
+						<element name="min" type="int8_t"/>
+						<element name="max" type="int8_t"/>
+					</dut>
+				</test>
+				<test name="4) mIC+spk测试|Mic&amp;&amp;SPK" need="false" auto="false" retry="0">
+					<req id="132">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="4">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="Mic失败|Mic FAILURE"/>
+							<enum value="2" name="Spk失败|Spk FAILURE"/>
+							<enum value="3" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+				<test name="5) 摄像头测试|Camera" need="false" auto="true" retry="0">
+					<req id="133">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="5">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+				<test name="6) HDMI IN&amp;&amp;OUT测试|HDMI IN&amp;&amp;OUT" need="false" auto="false" retry="0">
+					<req id="134">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="6">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+				<test name="7) Amimon USB测试|Amimon USB" need="false" auto="false" retry="0">
+					<req id="135">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="7">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+				<test name="8) WIFI测试|WIFI" need="false" auto="true" retry="0">
+					<req id="136">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="8">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+						<element name="&gt;eq. num" type="int8_t"/>
+						<element name="max dbm(abs.)" type="int8_t"/>
+					</dut>
+				</test>
+				<test name="9) BT测试|BT" need="false" auto="true" retry="0">
+					<req id="137">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="9">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+						<element name="&gt;eq. num" type="int8_t"/>
+					</dut>
+				</test>
+				<test name="10) 指南针测试|Compass" need="true" auto="true" retry="0">
+					<req id="138">
+						<!--0x8a -->
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="10">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+						<element name="C1" type="D3_F16u_Array"/>
+						<element name="C2" type="D3_F16u_Array"/>
+					</dut>
+				</test>
+				<test name="11) 光感、距感测试|Light&amp;&amp;Proximity" need="false" auto="true" retry="0">
+					<req id="139">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="11">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="光感失败|Light fail"/>
+							<enum value="2" name="距感失败|Proximity fail"/>
+							<enum value="3" name="失败|FAILURE"/>
+						</element>
+						<element name="Light1" type="int16_t"/>
+						<element name="Proximity1" type="int8_t"/>
+						<element name="Light2" type="int16_t"/>
+						<element name="Proximity2" type="int8_t"/>
+					</dut>
+				</test>
+				<test name="12) 陀螺仪测试|Gyroscope" need="true" auto="true" retry="0">
+					<req id="140">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="12">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+						<element name="C1" type="D3_F16u_Array"/>
+						<element name="C2" type="D3_F16u_Array"/>
+					</dut>
+				</test>
+				<test name="13) 马达、风扇测试|Motor&amp;&amp;Fan" need="false" auto="false" retry="0">
+					<req id="141">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="13">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="马达失败|Motor fail"/>
+							<enum value="2" name="风扇失败|Fan fail"/>
+							<enum value="3" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+				<test name="14) Amimon电压测试|Amimon Voltage" need="false" auto="false" retry="0">
+					<req id="142">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="14">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+				<test name="15) GPS测试|GPS" need="false" auto="false" retry="0">
+					<req id="143">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="15">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+				<test name="16) RC USB测试|RC USB" need="false" auto="true" retry="0">
+					<req id="144">
+						<element name="timeout" type="uint16_t">60</element>
+					</req>
+					<dut id="16">
+						<element name="result" type="int8_t">
+							<enum value="0" name="成功|PASS"/>
+							<enum value="1" name="失败|FAILURE"/>
+						</element>
+					</dut>
+				</test>
+			</tests>
+		</command>
+	</protocol>
+</conf>

@@ -4,7 +4,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 add_subdirectory(crc)
 
-add_subdirectory(net)
+#add_subdirectory(net)
 
 add_library(
         crc_utils
@@ -27,5 +27,5 @@ add_library(
 target_link_libraries(
         connector
         crc_utils
-        net-lib
+#        net-lib
         log)
