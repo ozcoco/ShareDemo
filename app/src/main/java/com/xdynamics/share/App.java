@@ -15,7 +15,7 @@ public class App extends Application {
 
         Twitter.initialize(this);
 
-        startServer();
+//        startServer();
     }
 
 

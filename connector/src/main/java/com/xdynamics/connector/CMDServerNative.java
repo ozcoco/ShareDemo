@@ -1,10 +1,10 @@
 package com.xdynamics.connector;
 
-public class ETServerNative {
+public class CMDServerNative {
 
-    public ETServerNative() {
+    public CMDServerNative() {
 
-        System.loadLibrary("connector");
+        System.loadLibrary("connect-lib");
 
     }
 

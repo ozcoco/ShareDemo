@@ -22,6 +22,7 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.xdynamics.share.bean.ShareContent;
 import com.xdynamics.share.databinding.ActivityMainBinding;
+import com.xdynamics.share.oauth2.OAuth2Facebook;
 import com.xdynamics.share.services.NotificationCollectorService;
 
 import org.oz.utils.Ts;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final short TWEET_COMPOSER_REQUEST_CODE = 0x123;
     ActivityMainBinding mBinding;
+    OAuth2Facebook oauth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(mBinding.getRoot());
 
         requestPermission();
+
+        oauth = new OAuth2Facebook(this);
     }
 
 
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
 
         shareCallback.onActivityResult(requestCode, resultCode, data);
+
+        oauth.onActivityResult(requestCode, resultCode, data);
 
 //        twitterLoginButton.onActivityResult(requestCode, resultCode, data);
 
@@ -129,9 +135,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             share2();
         } else if (v.equals(mBinding.btnShareYoutube)) {
             shareToYoutube();
+        } else if (v.equals(mBinding.btnOauth)) {
+            oauth2();
         } else {
             share();
         }
+    }
+
+    /******************************  facebook oauth2 ************************************/
+
+
+    private void oauth2() {
+
+        oauth.oauth2();
+
     }
 
 
@@ -152,8 +169,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareImage() {
 
-        String img = "/test2.jpg";
-        String img2 = "/DCIM/Camera/IMG_20190130_072247.jpg";
+        String img = "test2.jpg";
+        String img2 = "test.jpg";
         String mediaPath = Environment.getExternalStorageDirectory() + img;
         String mediaPath2 = Environment.getExternalStorageDirectory() + img2;
 
@@ -172,14 +189,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareMedia() {
 
-        String img = "/test2.jpg";
-        String img2 = "/DCIM/Camera/IMG_20190130_072247.jpg";
+        String img = "test2.jpg";
+        String img2 = "test.jpg";
         String mediaPath = Environment.getExternalStorageDirectory() + img;
         String mediaPath2 = Environment.getExternalStorageDirectory() + img2;
 
-        String v = "/vtest.mp4";
+        String v = "vtest.mp4";
         String mediaPath3 = Environment.getExternalStorageDirectory() + v;
-        String v2 = "/DCIM/Camera/VID_20190227_073108.mp4";
+        String v2 = "v.mp4";
         String mediaPath4 = Environment.getExternalStorageDirectory() + v2;
 
         ShareContent content = new ShareContent.Builder()
@@ -200,9 +217,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareVideo() {
 
-        String v = "/vtest.mp4";
+        String v = "vtest.mp4";
         String mediaPath3 = Environment.getExternalStorageDirectory() + v;
-        String v2 = "/DCIM/Camera/VID_20190227_073108.mp4";
+        String v2 = "v.mp4";
         String mediaPath4 = Environment.getExternalStorageDirectory() + v2;
 
         ShareContent content = new ShareContent.Builder()
@@ -311,9 +328,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 //        String filename = "/DCIM/Camera/test2.jpg";
-        String filename = "/test2.jpg";
-        String filename2 = "/DCIM/Camera/IMG_20190130_072247.jpg";
-        String filename3 = "/vtest.mp4";
+        String filename = "test2.jpg";
+        String filename2 = "test.jpg";
+        String filename3 = "vtest.mp4";
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
         String mediaPath2 = Environment.getExternalStorageDirectory() + filename2;
         String mediaPath3 = Environment.getExternalStorageDirectory() + filename3;
@@ -384,9 +401,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void shareToTwitter2() {
 
-        String filename = "/test2.jpg";
-        String filename2 = "/DCIM/Camera/IMG_20190130_072247.jpg";
-        String filename3 = "/vtest.mp4";
+        String filename = "test2.jpg";
+        String filename2 = "test.jpg";
+        String filename3 = "vtest.mp4";
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
         String mediaPath2 = Environment.getExternalStorageDirectory() + filename2;
         String mediaPath3 = Environment.getExternalStorageDirectory() + filename3;
@@ -410,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void shareImageToInstagram() {
 
-        String filename = "/test2.jpg";
+        String filename = "test2.jpg";
 
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
 
@@ -430,7 +447,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void shareVideoToInstagram() {
 
-        String filename = "/vtest.mp4";
+        String filename = "vtest.mp4";
 
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
 
@@ -490,7 +507,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void shareToYoutube() {
 
-        String filename = "/vtest.mp4";
+        String filename = "vtest.mp4";
 
         String mediaPath = Environment.getExternalStorageDirectory() + filename;
 

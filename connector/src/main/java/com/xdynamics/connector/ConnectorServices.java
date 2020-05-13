@@ -14,13 +14,13 @@ public class ConnectorServices extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private ETServerNative etServerNative;
+    private CMDServerNative mCMDServerNative;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        etServerNative = new ETServerNative();
+        mCMDServerNative = new CMDServerNative();
 
     }
 
@@ -31,11 +31,11 @@ public class ConnectorServices extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (etServerNative != null && !etServerNative.nativeIsRunning()) {
+        if (mCMDServerNative != null && !mCMDServerNative.nativeIsRunning()) {
 
-            etServerNative.nativeInit();
+            mCMDServerNative.nativeInit();
 
-            etServerNative.nativeTest();
+            mCMDServerNative.nativeTest();
 
         }
 
@@ -47,7 +47,7 @@ public class ConnectorServices extends Service {
     public void onDestroy() {
         super.onDestroy();
 
-        etServerNative.nativeDestroy();
+        mCMDServerNative.nativeDestroy();
 
     }
 }

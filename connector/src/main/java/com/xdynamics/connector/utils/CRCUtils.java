@@ -7,6 +7,6 @@ public class CRCUtils {
     public native static char crc16(String str);
 
     static {
-        System.loadLibrary("crc_utils");
+        System.loadLibrary("crc_utils-lib");
     }
 }
