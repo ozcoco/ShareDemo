@@ -1,8 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">ShareDemo</string>
     <string name="action_cancel">Cancel</string>
 
     <!-- facebook -->
-    <string name="facebook_app_id">711368076040966</string>
+    <string name="facebook_app_id">244461150108491</string>
+    <string name="fb_login_protocol_scheme">fb244461150108491</string>
 
 
     <!--Twitter-->

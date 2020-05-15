@@ -110,8 +110,19 @@
             android:layout_height="wrap_content"
             android:onClick="@{handleClick::onClick}"
             android:text="Facebook OAuth2"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_graph_share_link"
             app:layout_constraintTop_toBottomOf="@id/btn_sys" />
+
+
+        <Button
+            android:id="@+id/btn_graph_share_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{handleClick::onClick}"
+            android:text="graph share link"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_oauth" />
+
 
     </android.support.constraint.ConstraintLayout>
 </layout>

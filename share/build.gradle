@@ -30,6 +30,13 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //facebook sdk
     implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
+//    implementation 'com.facebook.android:facebook-core:4.42.0'
+//    implementation 'com.facebook.android:facebook-login:4.42.0'
+//    implementation 'com.facebook.android:facebook-share:4.42.0'
+//    implementation 'com.facebook.android:facebook-places:4.42.0'
+//    implementation 'com.facebook.android:facebook-messenger:4.42.0'
+//    implementation 'com.facebook.android:facebook-applinks:4.42.0'
+
 
     //twitter
     api 'com.twitter.sdk.android:twitter-core:3.3.0'

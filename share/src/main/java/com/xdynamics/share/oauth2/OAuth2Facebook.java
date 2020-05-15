@@ -2,7 +2,6 @@ package com.xdynamics.share.oauth2;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.facebook.AccessToken;
@@ -31,6 +30,10 @@ public class OAuth2Facebook implements OAuth2able, ActivityResultCallback {
 
     final static String TAG = OAuth2Facebook.class.getCanonicalName();
 
+    private static final String EMAIL = "email";
+    private static final String USER_POSTS = "user_posts";
+    private static final String AUTH_TYPE = "rerequest";
+
     private CallbackManager mCallbackManager;
 
     private LoginManager mLoginManager;
@@ -42,12 +45,13 @@ public class OAuth2Facebook implements OAuth2able, ActivityResultCallback {
         mActivity = activity;
         mCallbackManager = CallbackManager.Factory.create();
         mLoginManager = LoginManager.getInstance();
-        mLoginManager.setLoginBehavior(LoginBehavior.WEB_VIEW_ONLY);
+        mLoginManager.setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
+        mLoginManager.setAuthType(AUTH_TYPE);
     }
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mCallbackManager != null)
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
@@ -62,6 +66,8 @@ public class OAuth2Facebook implements OAuth2able, ActivityResultCallback {
                         public void onSuccess(LoginResult loginResult) {
                             // App code
                             AccessToken accessToken = loginResult.getAccessToken();
+
+                            Log.d(TAG, String.format("---------------》 accessToken: %s", accessToken.getToken()));
 
                             Log.d(TAG, String.format("---------------》 %s", accessToken.toString()));
 
@@ -87,9 +93,13 @@ public class OAuth2Facebook implements OAuth2able, ActivityResultCallback {
                         }
                     });
 
-        mLoginManager.logInWithReadPermissions(
-                mActivity, Arrays
-                        .asList("email", "user_likes", "user_status", "user_photos", "user_birthday", "public_profile", "user_friends"));
+//        mLoginManager.logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
+
+        mLoginManager.logInWithReadPermissions(mActivity, Arrays
+                .asList("email", "user_likes", "user_status", "user_photos", "user_videos", "user_birthday", "public_profile", "user_friends"));
+
+//        mLoginManager.logIn(mActivity, Arrays
+//                .asList("publish_actions", "email", "user_likes", "user_status", "user_photos", "user_birthday", "public_profile", "user_friends"));
 
     }
 

@@ -140,6 +140,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             share();
         }
+
+        switch (v.getId()) {
+
+            case R.id.btn_graph_share_link:
+
+                new FaceBookShare2().shareLink();
+
+                break;
+
+        }
+
+
     }
 
     /******************************  facebook oauth2 ************************************/

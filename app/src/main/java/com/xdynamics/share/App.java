@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.twitter.sdk.android.core.Twitter;
 import com.xdynamics.connector.ConnectorServices;
+import com.xdynamics.share.platform.FaceBook;
 
 public class App extends Application {
 
@@ -15,6 +16,8 @@ public class App extends Application {
 
         Twitter.initialize(this);
 
+        new FaceBook().init(this);
+
 //        startServer();
     }
 
@@ -22,8 +25,6 @@ public class App extends Application {
     private void startServer() {
 
         Intent intent = new Intent(getApplicationContext(), ConnectorServices.class);
-
-
 
         startService(intent);
 
