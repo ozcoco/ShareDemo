@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -145,7 +146,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btn_graph_share_link:
 
-                new FaceBookShare2().shareLink();
+                new FaceBookShare2(this).shareLink();
+
+                break;
+
+            case R.id.btn_web_view:
+
+                ContextCompat.startActivity(this, new Intent(this, WebViewActivity.class), null);
 
                 break;
 

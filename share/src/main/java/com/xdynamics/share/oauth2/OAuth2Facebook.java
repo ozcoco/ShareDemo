@@ -93,7 +93,8 @@ public class OAuth2Facebook implements OAuth2able, ActivityResultCallback {
                         }
                     });
 
-//        mLoginManager.logInWithPublishPermissions(mActivity, Collections.singletonList("publish_actions"));
+        mLoginManager.logInWithPublishPermissions(mActivity, Arrays
+                .asList("user_videos"));
 
         mLoginManager.logInWithReadPermissions(mActivity, Arrays
                 .asList("email", "user_likes", "user_status", "user_photos", "user_videos", "user_birthday", "public_profile", "user_friends"));

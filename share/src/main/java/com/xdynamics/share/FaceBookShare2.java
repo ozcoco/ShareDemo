@@ -1,13 +1,10 @@
 package com.xdynamics.share;
 
+import android.app.Activity;
 import android.net.Uri;
-import android.util.Log;
 
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.share.ShareApi;
-import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import java.util.UUID;
 
@@ -27,6 +24,12 @@ public class FaceBookShare2 {
 
     public final static String TAG = FaceBookShare2.class.getCanonicalName();
 
+    private Activity mActivity;
+
+    public FaceBookShare2(Activity activity) {
+        mActivity = activity;
+    }
+
     public void shareLink() {
 
         ShareLinkContent content = new ShareLinkContent.Builder()
@@ -35,6 +38,11 @@ public class FaceBookShare2 {
                 .setPageId(UUID.randomUUID().toString())
                 .build();
 
+        ShareDialog.show(mActivity, content);
+
+
+
+/*
         ShareApi.share(content, new FacebookCallback<Sharer.Result>() {
 
             @Override
@@ -57,6 +65,7 @@ public class FaceBookShare2 {
 
             }
         });
+*/
 
     }
 
