@@ -32,18 +32,47 @@ public class ExampleUnitTest {
         }
 
 
+        void a(){}
+        void a1(){}
+        void a2(){}
+
+
     }
 
 
     @Test
     public void test() {
 
+
+        A a = new A();
+
+        a.equals();
+
         new A() {
             {
-                System.out.println("2222222222222222");
-                System.out.println("******" + hashCode());
+
+                a();
+
+                a1();
+
+                a2();
+
+            }
+
+
+            {
+
+
+
+            }
+
+            {
+
+
+
             }
         };
+
 
     }
 

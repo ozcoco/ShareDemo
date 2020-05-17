@@ -3,6 +3,8 @@
     package="com.xdynamics.share">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -16,11 +18,11 @@
             android:name=".ConnectorActivity"
             android:label="@string/title_activity_connector"
             android:theme="@style/AppTheme.NoActionBar">
-         <!--   <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--   <intent-filter>
+                   <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+                   <category android:name="android.intent.category.LAUNCHER" />
+               </intent-filter>-->
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -29,7 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WebViewActivity" /> <!-- Twitter分享的接受广播 -->
+        <activity
+            android:name=".WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- Twitter分享的接受广播 -->
         <receiver
             android:name=".twitter.MyResultReceiver"
             android:exported="false">
