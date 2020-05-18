@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             NotificationCollectorService.Permission.gotoNotificationAccessSetting(getApplicationContext());
         }
 
-        PermissionUtils.permission(PermissionConstants.STORAGE).callback(new PermissionUtils.SimpleCallback() {
+        PermissionUtils.permission(PermissionConstants.STORAGE,PermissionConstants.CAMERA).callback(new PermissionUtils.SimpleCallback() {
             @Override
             public void onGranted() {
 

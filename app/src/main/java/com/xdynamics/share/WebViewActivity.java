@@ -1,20 +1,24 @@
 package com.xdynamics.share;
 
+import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.xdynamics.share.webview.ShareWebChromeClient;
@@ -74,7 +78,19 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.INTERNET,
+                Manifest.permission.ACCESS_NETWORK_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        }, 101);
+
         setContentView(new SwipeRefreshLayout(this) {
+
+            {
+                setForeground(new ColorDrawable(Color.WHITE));
+            }
+
             {
                 LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
@@ -116,15 +132,11 @@ public class WebViewActivity extends AppCompatActivity {
                                 }
 
                                 uploadMessage = filePathCallback;
+                                Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+                                i.addCategory(Intent.CATEGORY_OPENABLE);
+                                i.setType("*/*");
+                                startActivityForResult(Intent.createChooser(i, "Image/Video"), REQUEST_SELECT_FILE);
 
-                                Intent intent = fileChooserParams.createIntent();
-                                try {
-                                    startActivityForResult(intent, REQUEST_SELECT_FILE);
-                                } catch (ActivityNotFoundException e) {
-                                    uploadMessage = null;
-                                    Toast.makeText(view.getContext(), "Cannot Open File Chooser", Toast.LENGTH_LONG).show();
-                                    return false;
-                                }
                                 return true;
                             }
 
@@ -142,11 +154,30 @@ public class WebViewActivity extends AppCompatActivity {
                                 return super.shouldOverrideUrlLoading(view, request);
                             }
 
+
+                            @Override
+                            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                super.onPageStarted(view, url, favicon);
+
+//                                view.loadUrl("javascript:document.getElementById('viewport').style.display='none';");
+
+                            }
+
+                            @Override
+                            public void onLoadResource(WebView view, String url) {
+                                super.onLoadResource(view, url);
+//                                view.loadUrl("javascript:document.getElementById('viewport').style.display='none';");
+                            }
+
                             @Override
                             public void onPageFinished(WebView view, String url) {
                                 super.onPageFinished(view, url);
 
                                 setRefreshing(false);
+
+                                view.loadUrl("javascript:document.getElementById('header').style.display='none';document.getElementById('u_0_y').click();");
+
+                                ((SwipeRefreshLayout) (view.getParent())).setForeground(new ColorDrawable(Color.TRANSPARENT));
 
                             }
                         });
@@ -180,17 +211,17 @@ public class WebViewActivity extends AppCompatActivity {
 
 
     @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
-
-        if (mWebView != null) {
-
-            if (mWebView.canGoBack())
-                mWebView.goBack();
-            else
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //改写物理返回键的逻辑
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mWebView.canGoBack()) {
+                mWebView.goBack();//返回上一页面
+                return true;
+            } else {
                 finish();
+            }
         }
-
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

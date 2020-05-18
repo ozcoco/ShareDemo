@@ -3,6 +3,7 @@ package com.xdynamics.share.webview;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.GeolocationPermissions;
@@ -32,11 +33,10 @@ import java.util.Arrays;
 public class ShareWebChromeClient extends WebChromeClient {
 
 
-
     @Override
     public void onProgressChanged(WebView view, int newProgress) {
         super.onProgressChanged(view, newProgress);
-
+        Logger.d("onProgressChanged");
         Logger.d("Progress: %d", newProgress);
 
     }
@@ -44,6 +44,7 @@ public class ShareWebChromeClient extends WebChromeClient {
     @Override
     public void onReceivedTitle(WebView view, String title) {
         super.onReceivedTitle(view, title);
+        Logger.d("onReceivedTitle");
     }
 
     @Override
@@ -61,18 +62,18 @@ public class ShareWebChromeClient extends WebChromeClient {
     @Override
     public void onShowCustomView(View view, CustomViewCallback callback) {
         super.onShowCustomView(view, callback);
-        Logger.d(callback);
+        Logger.d("onShowCustomView");
     }
 
     @Override
     public void onHideCustomView() {
         super.onHideCustomView();
-        Logger.d("resultMsg");
+        Logger.d("onHideCustomView");
     }
 
     @Override
     public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
-        Logger.d("resultMsg");
+        Logger.d("onCreateWindow");
         return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
     }
 
@@ -84,31 +85,31 @@ public class ShareWebChromeClient extends WebChromeClient {
 
     @Override
     public void onCloseWindow(WebView window) {
-        Logger.d(window);
+        Logger.d("onCloseWindow");
         super.onCloseWindow(window);
     }
 
     @Override
     public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-        Logger.d(result);
+        Logger.d("onJsAlert");
         return super.onJsAlert(view, url, message, result);
     }
 
     @Override
     public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
-        Logger.d(result);
+        Logger.d("onJsConfirm");
         return super.onJsConfirm(view, url, message, result);
     }
 
     @Override
     public boolean onJsPrompt(WebView view, String url, String message, String defaultValue, JsPromptResult result) {
-        Logger.d(result);
+        Logger.d("onJsPrompt");
         return super.onJsPrompt(view, url, message, defaultValue, result);
     }
 
     @Override
     public boolean onJsBeforeUnload(WebView view, String url, String message, JsResult result) {
-        Logger.d(result);
+        Logger.d("onJsBeforeUnload");
         return super.onJsBeforeUnload(view, url, message, result);
     }
 
@@ -127,26 +128,28 @@ public class ShareWebChromeClient extends WebChromeClient {
     @Override
     public void onPermissionRequest(PermissionRequest request) {
         super.onPermissionRequest(request);
-        Logger.d(request);
+        Logger.d("onPermissionRequest");
     }
 
     @Override
     public void onPermissionRequestCanceled(PermissionRequest request) {
         super.onPermissionRequestCanceled(request);
-        Logger.d(request);
+        Logger.d("onPermissionRequestCanceled");
     }
 
     @Override
     public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
 
 
-        Logger.d(consoleMessage);
+        Logger.d("onConsoleMessage");
 
         return super.onConsoleMessage(consoleMessage);
     }
 
     @Override
     public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
+
+        Logger.d("onShowFileChooser");
 
         Logger.d("AcceptTypes: %s \n FilenameHint: %s \n Mode: %d \n Title: %s \n isCaptureEnabled: %d",
                 Arrays.toString(fileChooserParams.getAcceptTypes()),
@@ -161,5 +164,27 @@ public class ShareWebChromeClient extends WebChromeClient {
 
         return true;
 //        return super.onShowFileChooser(webView, filePathCallback, fileChooserParams);
+    }
+
+
+    @Nullable
+    @Override
+    public Bitmap getDefaultVideoPoster() {
+
+        Logger.d("getDefaultVideoPoster");
+        return super.getDefaultVideoPoster();
+    }
+
+    @Nullable
+    @Override
+    public View getVideoLoadingProgressView() {
+        Logger.d("getVideoLoadingProgressView");
+        return super.getVideoLoadingProgressView();
+    }
+
+    @Override
+    public void getVisitedHistory(ValueCallback<String[]> callback) {
+        super.getVisitedHistory(callback);
+        Logger.d("getVisitedHistory");
     }
 }

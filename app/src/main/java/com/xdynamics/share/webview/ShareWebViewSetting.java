@@ -1,6 +1,7 @@
 package com.xdynamics.share.webview;
 
 import android.annotation.SuppressLint;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -30,6 +31,9 @@ public class ShareWebViewSetting {
     public void load() {
 
         if (mWebView == null) return;
+
+        mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
 //声明WebSettings子类
         WebSettings webSettings = mWebView.getSettings();
 //如果访问的页面中要与Javascript交互，则webview必须设置支持Javascript
@@ -55,8 +59,8 @@ public class ShareWebViewSetting {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
         webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
         webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
-
         webSettings.setDomStorageEnabled(true);
+        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
         cookie();
     }
