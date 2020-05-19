@@ -3,9 +3,6 @@ package com.xdynamics.share;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,13 +11,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JsResult;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 
 import com.orhanobut.logger.Logger;
+import com.xdynamics.share.webview.ShareJsInterface;
 import com.xdynamics.share.webview.ShareWebChromeClient;
 import com.xdynamics.share.webview.ShareWebViewClient;
 import com.xdynamics.share.webview.ShareWebViewSetting;
@@ -39,9 +38,11 @@ import com.xdynamics.share.webview.ShareWebViewSetting;
  */
 public class WebViewActivity extends AppCompatActivity {
 
-    private String URL_BASE = "https://m.facebook.com/";
+    private String URL_BASE = ShareConfig.Facebook.URL_HOME;
 
     private WebView mWebView;
+
+    private int uploadCount = 0;
 
     public ValueCallback<Uri[]> uploadMessage;
     private ValueCallback<Uri> mUploadMessage;
@@ -88,10 +89,6 @@ public class WebViewActivity extends AppCompatActivity {
         setContentView(new SwipeRefreshLayout(this) {
 
             {
-                setForeground(new ColorDrawable(Color.WHITE));
-            }
-
-            {
                 LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
                 addView(new WebView(getContext()) {
@@ -103,6 +100,39 @@ public class WebViewActivity extends AppCompatActivity {
                         new ShareWebViewSetting(this).load();
 
                         setWebChromeClient(new ShareWebChromeClient() {
+
+                            @Override
+                            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+
+                                result.confirm();
+
+                                if (ShareConfig.Facebook.URL_HOME.contains(url)) {
+
+                                    ++uploadCount;
+
+                                }
+
+                                return true;
+//                                return super.onJsAlert(view, url, message, result);
+                            }
+
+                            @Override
+                            public void onProgressChanged(WebView view, int newProgress) {
+                                super.onProgressChanged(view, newProgress);
+
+                                if (newProgress == 100 && uploadCount == 0) {
+
+                                    view.loadUrl("javascript:document.querySelector('#composer-main-view-id div div div ._4wqq').addEventListener('click', function(){ it_share.finish(); });");
+
+                                    view.loadUrl("javascript:document.querySelectorAll('#composer-main-view-id ._vbz')[0].addEventListener('click', function(){ it_share.filePickerCallback(); });");
+
+                                    view.loadUrl("javascript:document.getElementById('header').innerHTML='';document.getElementById('viewport').style.display='none';document.getElementById('u_0_y').click();");
+
+                                    view.loadUrl("javascript:document.querySelectorAll('#composer-main-view-id ._vbz')[0].click()");
+
+                                }
+
+                            }
 
                             //For Android 4.1 only
                             protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
@@ -137,6 +167,9 @@ public class WebViewActivity extends AppCompatActivity {
                                 i.setType("*/*");
                                 startActivityForResult(Intent.createChooser(i, "Image/Video"), REQUEST_SELECT_FILE);
 
+                                if (getVisibility() == View.INVISIBLE)
+                                    setVisibility(View.VISIBLE);
+
                                 return true;
                             }
 
@@ -145,44 +178,29 @@ public class WebViewActivity extends AppCompatActivity {
 
                         setWebViewClient(new ShareWebViewClient() {
 
-
-                            @Override
-                            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-
-                                URL_BASE = request.getUrl().getPath();
-
-                                return super.shouldOverrideUrlLoading(view, request);
-                            }
-
-
-                            @Override
-                            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                                super.onPageStarted(view, url, favicon);
-
-//                                view.loadUrl("javascript:document.getElementById('viewport').style.display='none';");
-
-                            }
-
-                            @Override
-                            public void onLoadResource(WebView view, String url) {
-                                super.onLoadResource(view, url);
-//                                view.loadUrl("javascript:document.getElementById('viewport').style.display='none';");
-                            }
-
                             @Override
                             public void onPageFinished(WebView view, String url) {
                                 super.onPageFinished(view, url);
 
                                 setRefreshing(false);
 
-                                view.loadUrl("javascript:document.getElementById('header').style.display='none';document.getElementById('u_0_y').click();");
-
-                                ((SwipeRefreshLayout) (view.getParent())).setForeground(new ColorDrawable(Color.TRANSPARENT));
-
                             }
                         });
 
                         setWebContentsDebuggingEnabled(true);
+
+                        addJavascriptInterface(new ShareJsInterface(WebViewActivity.this){
+
+                            @Override
+                            public void filePickerCallback() {
+                                super.filePickerCallback();
+
+//                                loadUrl("javascript:document.getElementById('header').innerHTML=''");
+
+                            }
+                        }, "it_share");
+
+                        setVisibility(View.INVISIBLE);
 
                         loadUrl(URL_BASE);
                     }

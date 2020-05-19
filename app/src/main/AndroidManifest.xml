@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".WebViewActivity"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- Twitter分享的接受广播 -->
+            android:parentActivityName=".MainActivity" /> <!-- Twitter分享的接受广播 -->
         <receiver
             android:name=".twitter.MyResultReceiver"
             android:exported="false">

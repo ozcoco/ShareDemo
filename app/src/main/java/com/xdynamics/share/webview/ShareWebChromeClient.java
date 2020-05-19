@@ -91,7 +91,8 @@ public class ShareWebChromeClient extends WebChromeClient {
 
     @Override
     public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-        Logger.d("onJsAlert");
+        Logger.d("----onJsAlert----> url: %s \n message: %s", url, message);
+
         return super.onJsAlert(view, url, message, result);
     }
 

@@ -60,8 +60,7 @@ public class ShareWebViewClient extends WebViewClient {
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
 
-        Logger.d("shouldInterceptRequest---- log: %s", request.getUrl());
-
+        Logger.d("shouldInterceptRequest---- Method: %s \n log: %s", request.getMethod(), request.getUrl());
 
         return super.shouldInterceptRequest(view, request);
     }
@@ -83,7 +82,7 @@ public class ShareWebViewClient extends WebViewClient {
     @Override
     public void onLoadResource(WebView view, String url) {
         super.onLoadResource(view, url);
-        Logger.d("onLoadResource");
+        Logger.d("----onLoadResource----> url: %s", url);
     }
 
     @Override

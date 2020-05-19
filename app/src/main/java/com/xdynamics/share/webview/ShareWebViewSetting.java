@@ -57,10 +57,11 @@ public class ShareWebViewSetting {
         webSettings.setAllowUniversalAccessFromFileURLs(true);
         webSettings.setDatabaseEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
-        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
+//        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
         webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
         webSettings.setDomStorageEnabled(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        webSettings.setMediaPlaybackRequiresUserGesture(false);
 
         cookie();
     }
