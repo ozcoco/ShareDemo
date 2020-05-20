@@ -100,6 +100,27 @@ public class WebViewActivity extends AppCompatActivity {
                         new ShareWebViewSetting(this).load();
 
                         setWebChromeClient(new ShareWebChromeClient() {
+                            @Override
+                            public void onProgressChanged(WebView view, int newProgress) {
+                                super.onProgressChanged(view, newProgress);
+
+                                if (uploadCount == 0) {
+
+                                    if (newProgress == 100) {
+//                                        view.evaluateJavascript("javascript:document.querySelector('#composer-main-view-id div div div ._4wqq').addEventListener('click', function(){ it_share.finish(); });", null);
+//                                        view.evaluateJavascript("javascript:document.querySelectorAll('#composer-main-view-id ._vbz')[0].addEventListener('click', function(){ it_share.filePickerCallback(); });", null);
+                                    }
+
+//                                    view.evaluateJavascript("javascript:document.querySelector('._6be8 span').onanimationiteration = function(){ console.log('-----> openCallback');  var picker = document.querySelectorAll('#composer-main-view-id ._vbz')[0];  if(picker){ picker.click();  this.onanimationiteration='none' };", null);
+
+//                                    view.evaluateJavascript("javascript:if(window.bgUploadInlineComposerCallback && window.bgUploadInlineComposerCallback()) { };document.getElementById('composer-placeholder-form').style.display = '';document.getElementById('viewport').style.display = 'none';", null);
+                                    view.evaluateJavascript("javascript:document.querySelector('#u_0_1v').click();", null);
+
+                                    view.evaluateJavascript("javascript:document.querySelector('#structured_composer_form div div span div[role]').click();", null);
+
+                                }
+
+                            }
 
                             @Override
                             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
@@ -116,23 +137,6 @@ public class WebViewActivity extends AppCompatActivity {
 //                                return super.onJsAlert(view, url, message, result);
                             }
 
-                            @Override
-                            public void onProgressChanged(WebView view, int newProgress) {
-                                super.onProgressChanged(view, newProgress);
-
-                                if (newProgress == 100 && uploadCount == 0) {
-
-                                    view.loadUrl("javascript:document.querySelector('#composer-main-view-id div div div ._4wqq').addEventListener('click', function(){ it_share.finish(); });");
-
-                                    view.loadUrl("javascript:document.querySelectorAll('#composer-main-view-id ._vbz')[0].addEventListener('click', function(){ it_share.filePickerCallback(); });");
-
-                                    view.loadUrl("javascript:document.getElementById('header').innerHTML='';document.getElementById('viewport').style.display='none';document.getElementById('u_0_y').click();");
-
-                                    view.loadUrl("javascript:document.querySelectorAll('#composer-main-view-id ._vbz')[0].click()");
-
-                                }
-
-                            }
 
                             //For Android 4.1 only
                             protected void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
@@ -178,6 +182,7 @@ public class WebViewActivity extends AppCompatActivity {
 
                         setWebViewClient(new ShareWebViewClient() {
 
+
                             @Override
                             public void onPageFinished(WebView view, String url) {
                                 super.onPageFinished(view, url);
@@ -189,7 +194,8 @@ public class WebViewActivity extends AppCompatActivity {
 
                         setWebContentsDebuggingEnabled(true);
 
-                        addJavascriptInterface(new ShareJsInterface(WebViewActivity.this){
+
+                        addJavascriptInterface(new ShareJsInterface(WebViewActivity.this) {
 
                             @Override
                             public void filePickerCallback() {
@@ -200,7 +206,7 @@ public class WebViewActivity extends AppCompatActivity {
                             }
                         }, "it_share");
 
-                        setVisibility(View.INVISIBLE);
+//                        setVisibility(View.INVISIBLE);
 
                         loadUrl(URL_BASE);
                     }

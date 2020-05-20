@@ -99,7 +99,8 @@ public class ShareWebChromeClient extends WebChromeClient {
     @Override
     public boolean onJsConfirm(WebView view, String url, String message, JsResult result) {
         Logger.d("onJsConfirm");
-        return super.onJsConfirm(view, url, message, result);
+        return true;
+//        return super.onJsConfirm(view, url, message, result);
     }
 
     @Override

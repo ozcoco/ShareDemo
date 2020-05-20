@@ -1,6 +1,7 @@
 package com.xdynamics.share.webview;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
@@ -32,16 +33,14 @@ public class ShareWebViewSetting {
 
         if (mWebView == null) return;
 
+        Context context = mWebView.getContext();
+
         mWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
 //声明WebSettings子类
         WebSettings webSettings = mWebView.getSettings();
 //如果访问的页面中要与Javascript交互，则webview必须设置支持Javascript
         webSettings.setJavaScriptEnabled(true);
-//支持插件
-//                webSettings.setPluginsEnabled(true);
-        webSettings.setSupportMultipleWindows(true);
-
 //设置自适应屏幕，两者合用
         webSettings.setUseWideViewPort(true); //将图片调整到适合webview的大小
         webSettings.setLoadWithOverviewMode(true); // 缩放至屏幕的大小
@@ -55,13 +54,21 @@ public class ShareWebViewSetting {
         webSettings.setAllowContentAccess(true);
         webSettings.setAllowFileAccessFromFileURLs(true);
         webSettings.setAllowUniversalAccessFromFileURLs(true);
-        webSettings.setDatabaseEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
 //        webSettings.setLoadsImagesAutomatically(true); //支持自动加载图片
         webSettings.setDefaultTextEncodingName("utf-8");//设置编码格式
-        webSettings.setDomStorageEnabled(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         webSettings.setMediaPlaybackRequiresUserGesture(false);
+
+//      开启Application Cache存储机制
+        String cacheDirPath = context.getFilesDir().getAbsolutePath() + "cache/";
+        webSettings.setAppCachePath(cacheDirPath);
+        webSettings.setAppCacheEnabled(true);
+//      开启DOM storage
+        webSettings.setDomStorageEnabled(true);
+//      开启数据库存储机制
+        webSettings.setDatabaseEnabled(true);
+
 
         cookie();
     }
